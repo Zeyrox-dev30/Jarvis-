@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeyrox INDUSTRIES - SECURITY PROTOCOL</title>
+    <style>
+        :root {
+            --stark-color: #00f0ff;
+            --glow-shadow: rgba(0, 240, 255, 0.2);
+        }
+
+        /* Le vrai curseur est caché partout : le viseur laser le remplace */
+        *,
+        html,
+        body {
+            cursor: none !important;
+        }
+
+        body {
+            background-color: #050b14;
+            color: var(--stark-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 35px 35px;
+            transition: color 0.5s ease;
+        }
+
+        .hud-container {
+            border: 2px solid var(--stark-color);
+            box-shadow: 0 0 15px var(--glow-shadow);
+            margin: 20px;
+            padding: 20px;
+            height: calc(100vh - 80px);
+            position: relative;
+            transition: border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        h1 {
+            text-shadow: 0 0 10px var(--stark-color);
+            letter-spacing: 4px;
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .armory-menu {
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 20;
+        }
+
+        .armory-title {
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            opacity: 0.8;
+            font-weight: bold;
+        }
+
+        .widget-stats {
+            position: absolute;
+            top: 100px;
+            right: 20px;
+            border: 1px dashed var(--stark-color);
+            padding: 15px;
+            width: 250px;
+            background: rgba(5, 11, 20, 0.6);
+        }
+
+        .widget-energie {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            border: 1px solid var(--stark-color);
+            padding: 15px;
+            background: rgba(5, 11, 20, 0.6);
+            box-shadow: 0 0 10px var(--glow-shadow);
+        }
+
+        .barre-energie {
+            height: 12px;
+            border: 1px solid var(--stark-color);
+            margin-top: 10px;
+            background: #00f0ff;
+            width: 100%;
+            transition: background 0.5s ease, width 0.5s ease;
+        }
+
+        .btn-stark-init {
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(5, 11, 20, 0.6);
+            border: 2px solid #00f0ff;
+            color: #00f0ff;
+            padding: 20px 40px;
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            letter-spacing: 3px;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .btn-stark-init:hover {
+            background: #00f0ff;
+            color: #050b14;
+            box-shadow: 0 0 30px #00f0ff;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        #viseur-laser {
+            position: fixed;
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--stark-color);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 99999;
+            box-shadow: 0 0 10px var(--stark-color);
+            transition: width 0.1s, height 0.1s;
+        }
+
+        #viseur-laser::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background-color: #ff3366;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px #ff3366;
+        }
+
+        .widget-camera {
+            position: absolute;
+            bottom: 80px;
+            left: 20px;
+            width: 220px;
+            height: 150px;
+            border: 1px solid var(--stark-color);
+            background: rgba(5, 11, 20, 0.8);
+            overflow: hidden;
+            box-shadow: 0 0 10px var(--glow-shadow);
+            transition: opacity 0.8s ease, transform 0.8s ease, border-color 0.5s ease;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--stark-color);
+            opacity: 0.7;
+            box-shadow: 0 0 8px var(--stark-color);
+            animation: scanAnim 2.5s linear infinite;
+        }
+
+        @keyframes scanAnim {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        .scan-text {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            background: rgba(5, 11, 20, 0.7);
+            padding: 2px 5px;
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            to { visibility: hidden; }
+        }
+
+        /* --- SECOUSSE (AUTO-DESTRUCTION + IMPACTS) --- */
+        .secousse-critique {
+            animation: tremblement 0.15s linear infinite;
+        }
+
+        @keyframes tremblement {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            75% { transform: translate(2px, 1px) rotate(-2deg); }
+            90% { transform: translate(-1px, -1px) rotate(1deg); }
+            100% { transform: translate(1px, -2px) rotate(0deg); }
+        }
+
+        /* --- BOUTON DE RÉARMEMENT D'URGENCE --- */
+        .btn-stark-rearm {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff3333;
+            color: #ff3333;
+            padding: 15px 30px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            animation: pulseAlerte 1s infinite alternate;
+        }
+
+        .btn-stark-rearm:hover {
+            background: #ff3333;
+            color: #050b14;
+            box-shadow: 0 0 30px #ff3333;
+        }
+
+        @keyframes pulseAlerte {
+            0% { box-shadow: 0 0 10px rgba(255, 51, 51, 0.3); }
+            100% { box-shadow: 0 0 25px rgba(255, 51, 51, 0.8); }
+        }
+
+        /* --- ARMURERIE : éléments du carrousel circulaire --- */
+        #armory-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 30;
+            display: none;
+        }
+
+        .armory-item {
+            --c: #00f0ff;
+            position: absolute;
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            border: 2px solid var(--c);
+            background: rgba(5, 11, 20, 0.9);
+            color: var(--c);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            padding: 0;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 0 10px var(--c);
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+
+        .armory-item .ai-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .armory-item .ai-label {
+            font-size: 8px;
+            letter-spacing: 1px;
+        }
+
+        .armory-item:hover {
+            background: var(--c);
+            color: #050b14;
+            box-shadow: 0 0 25px var(--c);
+        }
+
+        .armory-item.equipe {
+            box-shadow: 0 0 22px var(--c), inset 0 0 14px var(--c);
+        }
+
+        /* --- PANNEAU DU MODE COMBAT --- */
+        #combat-panel {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 24px;
+            z-index: 25;
+            border: 1px solid #ff2244;
+            background: rgba(5, 11, 20, 0.78);
+            color: #ff2244;
+            padding: 8px 18px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 6px #ff2244;
+            box-shadow: 0 0 14px rgba(255, 34, 68, 0.4);
+            pointer-events: none;
+        }
+
+        #combat-panel .cp-titre {
+            font-weight: bold;
+            animation: blink 1.2s steps(2, start) infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viseur-laser"></div>
+
+    <!-- Écran de fin / alerte (caché tant qu'il n'y a pas d'auto-destruction) -->
+    <div id="screen-saver-text"
+        style="display: none; position: absolute; top: 22%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; z-index: 1; font-weight: bold; letter-spacing: 5px;">
+    </div>
+
+    <!-- Module de Préchauffage Stark -->
+    <div id="preheat-container"
+        style="position: absolute; top: 85%; left: 50%; transform: translate(-50%, -50%); width: 1050px; height: 150px; display: flex; justify-content: space-between; pointer-events: none; z-index: 10;">
+        <div style="width: 250px; font-size: 15px; color: #eb0e0e; text-shadow: 0 0 5px #ffaa00;">
+            <div>SYS_L_PROPULSION: <span id="preheat-val-l">0</span>%</div>
+            <div
+                style="width: 100%; height: 6px; border: 1px solid #ffaa00; margin-top: 4px; background: rgba(5,11,20,0.5); overflow: hidden;">
+                <div id="preheat-bar-l"
+                    style="width: 0%; height: 100%; background: #ffaa00; box-shadow: 0 0 8px #ffaa00; transition: width 0.1s linear;">
+                </div>
+            </div>
+        </div>
+        <div style="width: 250px; font-size: 15px; color: #eb0e0e; text-shadow: 0 0 5px #ffaa00; text-align: right;">
+            <div>SYS_R_PROPULSION: <span id="preheat-val-r">0</span>%</div>
+            <div
+                style="width: 100%; height: 6px; border: 1px solid #ffaa00; margin-top: 4px; background: rgba(5,11,20,0.5); overflow: hidden;">
+                <div id="preheat-bar-r"
+                    style="width: 0%; height: 100%; background: #ffaa00; box-shadow: 0 0 8px #ffaa00; transition: width 0.1s linear; float: right;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-stark-init" id="btn-init">INITIALISER LE SYSTÈME ZEYROX</button>
+
+    <!-- Panneau du mode combat -->
+    <div id="combat-panel">
+        <div class="cp-titre">⚠ MODE COMBAT ACTIF</div>
+        <div id="cp-munitions">MUNITIONS: --</div>
+        <div id="cp-score">CIBLES NEUTRALISÉES: 0</div>
+        <div id="cp-bouclier">BOUCLIER: 100%</div>
+    </div>
+
+    <!-- Couche des éléments du carrousel d'armurerie -->
+    <div id="armory-layer"></div>
+
+    <div class="hud-container" id="hud" style="display: none;">
+        <h1 id="system-title">J.A.R.V.I.S. // PROTOCOLES COUPLÉS</h1>
+        <p id="system-status">[SCANNER] RECHERCHE DE CORRESPONDANCE FACIALE...</p>
+
+        <div class="armory-menu">
+            <div class="armory-title">Fonction d'Urgence</div>
+            <div> MAK 10 (Classic) [1]</div>
+            <div> Mode Carnage (Assaut) [2]</div>
+            <div> PROTOCOLE FURTIF (Ghost) [3]</div>
+            <div> MODE COMBAT [C]</div>
+        </div>
+
+        <!-- Le Scanner Biométrique Rétinien -->
+        <div class="widget-camera" id="biometric-box">
+            <div class="scan-line"></div>
+            <div class="scan-text" id="status-camera">SCAN...</div>
+            <div
+                style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 11px; opacity: 0.5; text-align: center; padding: 10px; box-sizing: border-box;">
+                [FLUX RETINAL SECURE]
+            </div>
+        </div>
+
+        <!-- Le Tableau de calculs cyber Matrix (caché au début) -->
+        <div id="matrix-box"
+            style="position: absolute; bottom: 80px; left: 20px; width: 220px; height: 150px; border: 1px dashed var(--stark-color); background: rgba(5,11,20,0.6); padding: 10px; font-size: 10px; overflow: hidden; display: none; box-sizing: border-box; box-shadow: 0 0 10px var(--glow-shadow);">
+            <div style="color: var(--stark-color); font-weight: bold; margin-bottom: 5px;">// MATRIX DATA FLOW</div>
+            <div id="matrix-lines" style="line-height: 14px; opacity: 0.7;"></div>
+        </div>
+
+        <div class="widget-stats">
+            <div class="armory-title">// CAPTEURS REELS</div>
+            <p id="live-time">HEURE : --:--:--</p>
+            <p id="live-date">DATE : --/--/----</p>
+        </div>
+
+        <div class="widget-energie">
+            <div id="battery-status">RÉACTEUR ARC : ANALYSE...</div>
+            <div class="barre-energie" id="battery-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  MOTEUR AUDIO SYNTHÉ
+        // ============================================================
+        let audioCtx = null;
+        function initAudio() { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+
+        function playBipSonore(freq, duree) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duree);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duree);
+        }
+
+        function playScanLaser() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.5);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        // Son de tir (mode combat)
+        function playTir() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(1100, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.14);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.14);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.14);
+        }
+
+        // ============================================================
+        //  OUTILS
+        // ============================================================
+        const root = document.documentElement;
+        const TAU = Math.PI * 2;
+
+        function hexRgba(hex, a) {
+            let h = hex.replace('#', '');
+            if (h.length === 3) h = h.split('').map(c => c + c).join('');
+            const n = parseInt(h.substring(0, 6), 16);
+            return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+        }
+
+        // ============================================================
+        //  CANVAS : HOLOGRAMME + ARMURE + RADAR + ARMURERIE + COMBAT
+        // ============================================================
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'absolute'; canvas.style.top = '0'; canvas.style.left = '0';
+        canvas.style.width = '100%'; canvas.style.height = '100%';
+        canvas.style.zIndex = '2';
+        canvas.style.pointerEvents = 'none';
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth, height = canvas.height = window.innerHeight;
+        let angle = 0, mouseX = width / 2, mouseY = height / 2;
+        let frame = 0;
+
+        // --- États globaux ---
+        let couleurNormale = '#00f0ff';   // couleur de l'équipement choisi
+        let couleurHologramme = '#00f0ff'; // couleur réellement affichée
+        let formeActuelle = 'cube';
+        let systemeInitialise = false;
+        let explosionEnCours = false;      // empêche de lancer l'explosion 2 fois
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // --- Cœur holographique & zoom ---
+        let zoomCoeur = 1;
+        let zoomActuel = 1;
+        const vitesseAmortissement = 0.1;
+
+        // --- Armure filaire en fausse 3D ---
+        let angleArmure = 0;
+        let vitesseRotationArmure = 0.005;
+        let armureSurvolee = false;
+
+        const pointsArmure = {
+            casque: [0, -70, 0],
+            cou: [0, -55, 0],
+            epauleL: [-35, -45, 0],
+            epauleR: [35, -45, 0],
+            reacteur: [0, -25, 10],
+            busteL: [-20, -10, 0],
+            busteR: [20, -10, 0],
+            bassinL: [-15, 25, 0],
+            bassinR: [15, 20, 0],
+            mainL: [-50, 10, -5],
+            mainR: [50, 10, -5],
+            piedL: [-20, 85, 0],
+            piedR: [20, 85, 0]
+        };
+        const osArmure = [
+            ['casque', 'cou'],
+            ['cou', 'epauleL'], ['cou', 'epauleR'],
+            ['epauleL', 'busteL'], ['epauleR', 'busteR'],
+            ['epauleL', 'mainL'], ['epauleR', 'mainR'],
+            ['busteL', 'reacteur'], ['busteR', 'reacteur'],
+            ['busteL', 'bassinL'], ['busteR', 'bassinR'],
+            ['bassinL', 'bassinR'],
+            ['bassinL', 'piedL'], ['bassinR', 'piedR']
+        ];
+
+        function projeterEtTourner(point, ang) {
+            const x = point[0];
+            const y = point[1];
+            const z = point[2];
+            const rotX = x * Math.cos(ang) - z * Math.sin(ang);
+            const rotZ = z * Math.cos(ang) + x * Math.sin(ang);
+            const distance = 300;
+            const echelle = distance / (distance + rotZ);
+            return { x: rotX * echelle, y: y * echelle };
+        }
+
+        function drawArmor() {
+            ctx.save();
+            ctx.translate(width * 0.75, height * 0.5);
+            ctx.strokeStyle = couleurHologramme;
+            ctx.lineWidth = 1.2;
+            ctx.shadowBlur = armureSurvolee ? 18 : 8;
+            ctx.shadowColor = couleurHologramme;
+
+            const pointsProjetes = {};
+            for (const nom in pointsArmure) {
+                pointsProjetes[nom] = projeterEtTourner(pointsArmure[nom], angleArmure);
+            }
+
+            osArmure.forEach(liaison => {
+                const p1 = pointsProjetes[liaison[0]];
+                const p2 = pointsProjetes[liaison[1]];
+                if (p1 && p2) {
+                    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                }
+            });
+
+            for (const nom in pointsProjetes) {
+                const p = pointsProjetes[nom];
+                ctx.beginPath();
+                if (nom === 'reacteur') { ctx.fillStyle = '#ffffff'; ctx.arc(p.x, p.y, 4, 0, TAU); }
+                else { ctx.fillStyle = couleurHologramme; ctx.arc(p.x, p.y, 2, 0, TAU); }
+                ctx.fill();
+            }
+
+            ctx.font = "9px 'Courier New', monospace"; ctx.fillStyle = couleurHologramme; ctx.textAlign = "center";
+            ctx.fillText("ARMOR_STREAM: SYNC", 0, 130);
+            ctx.fillText("ROTATION_SPEED: " + (vitesseRotationArmure * 1000).toFixed(0) + " RAD/S", 0, 145);
+            ctx.restore();
+        }
+
+        function drawHologram(size) {
+            ctx.strokeStyle = couleurHologramme; ctx.lineWidth = 1.5; ctx.shadowBlur = 15; ctx.shadowColor = couleurHologramme;
+            ctx.save();
+            ctx.translate(width / 2, height / 2);
+            ctx.scale(zoomCoeur, zoomCoeur);
+
+            ctx.save(); ctx.rotate(angle * 0.5); ctx.beginPath(); ctx.arc(0, 0, size * 0.9, 0, TAU); ctx.stroke();
+            for (let i = 0; i < 8; i++) { ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(size * 0.85, 0); ctx.lineTo(size * 0.95, 0); ctx.stroke(); }
+            ctx.restore();
+
+            ctx.save(); ctx.rotate(-angle * 0.8); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -size * 0.4); ctx.lineTo(size * 0.35, size * 0.2); ctx.lineTo(-size * 0.35, size * 0.2); ctx.closePath(); ctx.stroke(); ctx.restore();
+
+            ctx.beginPath(); ctx.arc(0, 0, size * 0.15, 0, TAU); ctx.stroke();
+            ctx.save(); ctx.rotate(angle * 0.2); ctx.beginPath();
+            ctx.moveTo(-size * 1.1, 0); ctx.lineTo(-size * 0.7, 0);
+            ctx.moveTo(size * 0.7, 0); ctx.lineTo(size * 1.1, 0);
+            ctx.moveTo(0, -size * 1.1); ctx.lineTo(0, -size * 0.7);
+            ctx.moveTo(0, size * 0.7); ctx.lineTo(0, size * 1.1);
+            ctx.stroke(); ctx.restore();
+
+            if (zoomCoeur > 1.1) {
+                ctx.save(); ctx.font = "10px 'Courier New', monospace"; ctx.fillStyle = couleurHologramme; ctx.shadowBlur = 8;
+                ctx.textAlign = "right"; ctx.fillText("CORE_STATUS: ACTIVE", -size * 1.2, -size * 0.3); ctx.fillText("ENERGY_OUTPUT: 100%", -size * 1.2, -size * 0.1); ctx.fillText("PALLADIUM_LEVEL: 98%", -size * 1.2, size * 0.1);
+                ctx.beginPath(); ctx.moveTo(-size * 1.1, 0); ctx.lineTo(-size * 1.6, 0); ctx.stroke();
+                ctx.textAlign = "left"; ctx.fillText("SYSTEM: MARK_LXXXV", size * 1.2, -size * 0.3); ctx.fillText("TARGET_LOCK: READY", size * 1.2, -size * 0.1); ctx.fillText("OS_VER: J.A.R.V.I.S._v4", size * 1.2, size * 0.1);
+                ctx.beginPath(); ctx.moveTo(size * 1.1, 0); ctx.lineTo(size * 1.6, 0); ctx.stroke();
+                ctx.restore();
+            }
+            ctx.restore();
+        }
+
+        // ============================================================
+        //  COULEUR DU HUD (équipement ou mode combat)
+        // ============================================================
+        const ROUGE_COMBAT = '#ff2244';
+        let combatActif = false;
+
+        function appliquerCouleur() {
+            const col = combatActif ? ROUGE_COMBAT : couleurNormale;
+            couleurHologramme = col;
+            root.style.setProperty('--stark-color', col);
+            root.style.setProperty('--glow-shadow', col + '33');
+            document.getElementById('battery-bar').style.backgroundColor = col;
+        }
+
+        // ============================================================
+        //  RADAR
+        // ============================================================
+        const radar = { balayage: 0, blips: [] };
+
+        function radarGeom() {
+            return { x: 140, y: height * 0.5 - 10, R: 70 };
+        }
+        function blipPos(b) {
+            const g = radarGeom();
+            return { x: g.x + Math.cos(b.a) * b.r * g.R, y: g.y + Math.sin(b.a) * b.r * g.R };
+        }
+
+        function majRadar() {
+            radar.balayage = (radar.balayage + 0.04) % TAU;
+
+            const max = combatActif ? 10 : 7;
+            if (radar.blips.length < max && Math.random() < (combatActif ? 0.012 : 0.007)) {
+                if (combatActif) {
+                    radar.blips.push({ a: Math.random() * TAU, r: 0.97, hostile: true, v: 0.0012 + Math.random() * 0.0012, vie: 99999 });
+                } else {
+                    radar.blips.push({ a: Math.random() * TAU, r: 0.15 + Math.random() * 0.8, hostile: false, v: 0, vie: 400 + Math.random() * 500 });
+                }
+            }
+
+            for (let i = radar.blips.length - 1; i >= 0; i--) {
+                const b = radar.blips[i];
+                if (b.hostile) {
+                    b.r -= b.v; b.a += 0.002;
+                    if (b.r <= 0.08) { radar.blips.splice(i, 1); subirDegats(); }
+                } else {
+                    b.vie--; b.a += 0.001;
+                    if (b.vie <= 0) radar.blips.splice(i, 1);
+                }
+            }
+        }
+
+        function drawRadar() {
+            const g = radarGeom();
+            ctx.save();
+            ctx.shadowBlur = 8; ctx.shadowColor = couleurHologramme;
+            ctx.strokeStyle = couleurHologramme; ctx.lineWidth = 1;
+
+            // fond
+            ctx.fillStyle = 'rgba(5,11,20,0.55)';
+            ctx.beginPath(); ctx.arc(g.x, g.y, g.R, 0, TAU); ctx.fill();
+
+            // anneaux + croix
+            for (let k = 1; k <= 3; k++) {
+                ctx.globalAlpha = 0.5;
+                ctx.beginPath(); ctx.arc(g.x, g.y, g.R * k / 3, 0, TAU); ctx.stroke();
+            }
+            ctx.globalAlpha = 0.35;
+            ctx.beginPath();
+            ctx.moveTo(g.x - g.R, g.y); ctx.lineTo(g.x + g.R, g.y);
+            ctx.moveTo(g.x, g.y - g.R); ctx.lineTo(g.x, g.y + g.R);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+
+            // traînée du balayage
+            const sw = radar.balayage;
+            for (let k = 0; k < 24; k++) {
+                ctx.fillStyle = hexRgba(couleurHologramme, 0.22 * (1 - k / 24));
+                ctx.beginPath(); ctx.moveTo(g.x, g.y);
+                ctx.arc(g.x, g.y, g.R, sw - (k + 1) * 0.03, sw - k * 0.03);
+                ctx.closePath(); ctx.fill();
+            }
+            // ligne de balayage
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(g.x, g.y); ctx.lineTo(g.x + Math.cos(sw) * g.R, g.y + Math.sin(sw) * g.R); ctx.stroke();
+
+            // contacts
+            let hostiles = 0;
+            radar.blips.forEach(b => {
+                const p = blipPos(b);
+                const diff = ((sw - b.a) % TAU + TAU) % TAU;
+                const alpha = 0.2 + 0.8 * (1 - diff / TAU);
+                const col = b.hostile ? ROUGE_COMBAT : couleurHologramme;
+                if (b.hostile) hostiles++;
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = col; ctx.shadowColor = col;
+                ctx.beginPath(); ctx.arc(p.x, p.y, b.hostile ? 3.5 : 2.5, 0, TAU); ctx.fill();
+                if (b.hostile) {
+                    ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(p.x, p.y, 7, 0, TAU); ctx.stroke();
+                }
+            });
+            ctx.globalAlpha = 1;
+
+            // contour + textes
+            ctx.strokeStyle = couleurHologramme; ctx.shadowColor = couleurHologramme; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(g.x, g.y, g.R, 0, TAU); ctx.stroke();
+            ctx.font = "9px 'Courier New', monospace"; ctx.fillStyle = couleurHologramme; ctx.textAlign = "center";
+            ctx.fillText(combatActif ? "RADAR // ZONE HOSTILE" : "RADAR // SECTEUR 7", g.x, g.y - g.R - 10);
+            ctx.fillText(combatActif ? ("HOSTILES: " + hostiles) : ("CONTACTS: " + radar.blips.length), g.x, g.y + g.R + 16);
+            ctx.restore();
+        }
+
+        // ============================================================
+        //  ARMURERIE : ROND EN BAS + CARROUSEL CIRCULAIRE
+        // ============================================================
+        const ARMORY_ITEMS = [
+            { id: 'mak10', label: 'MAK 10', icon: '🔫', col: '#ff3344', forme: 'cube', nom: 'MAK 10' },
+            { id: 'carnage', label: 'CARNAGE', icon: '💥', col: '#33ff55', forme: 'octaedre', nom: 'MODE CARNAGE' },
+            { id: 'furtif', label: 'FURTIF', icon: '👻', col: '#00aaff', forme: 'cercle', nom: 'PROTOCOLE FURTIF' },
+            { id: 'missile', label: 'MISSILES', icon: '🚀', col: '#ffaa00', forme: 'missile', nom: 'LANCE-MISSILES' },
+            { id: 'bouclier', label: 'BOUCLIER', icon: '🛡️', col: '#aa66ff', forme: 'bouclier', nom: 'BOUCLIER ÉNERGÉTIQUE' },
+            { id: 'drone', label: 'DRONES', icon: '🛸', col: '#ffee33', forme: 'drone', nom: 'ESCADRON DE DRONES' }
+        ];
+        const ARMORY_R = 150;
+        let armoryT = 0;                 // 0 = fermé, 1 = ouvert (animé)
+        let armoryOuvert = false;
+        let armoryAngle = -Math.PI / 2;
+        const armoryVitesse = 0.004;
+        let armoryItemSurvole = false;
+        let armoryEquipeId = null;
+
+        const armoryLayer = document.getElementById('armory-layer');
+        const itemEls = ARMORY_ITEMS.map((it) => {
+            const b = document.createElement('button');
+            b.className = 'armory-item';
+            b.style.setProperty('--c', it.col);
+            b.innerHTML = `<span class="ai-icon">${it.icon}</span><span class="ai-label">${it.label}</span>`;
+            b.addEventListener('mouseenter', () => { armoryItemSurvole = true; playBipSonore(1600, 0.04); });
+            b.addEventListener('mouseleave', () => { armoryItemSurvole = false; });
+            b.addEventListener('click', () => { if (!explosionEnCours) equiperParId(it.id); });
+            armoryLayer.appendChild(b);
+            return b;
+        });
+
+        function armoryCentre() {
+            const closedY = height - 70;
+            const openY = height - 70 - ARMORY_R - 45;
+            return { x: width / 2, y: closedY + (openY - closedY) * armoryT, closedY, openY };
+        }
+
+        // Ouverture / fermeture selon la position de la souris
+        function testZoneArmory(mx, my) {
+            if (!systemeInitialise || explosionEnCours) { armoryOuvert = false; return; }
+            const c = armoryCentre();
+            const dFerme = Math.hypot(mx - c.x, my - c.closedY);
+            const dOuvert = Math.hypot(mx - c.x, my - c.openY);
+            if (armoryOuvert) {
+                if (dFerme > 60 && dOuvert > ARMORY_R + 70) armoryOuvert = false;
+            } else if (dFerme < 55) {
+                armoryOuvert = true;
+                playBipSonore(1200, 0.08);
+            }
+        }
+
+        function majArmory() {
+            const cible = (armoryOuvert && !explosionEnCours) ? 1 : 0;
+            armoryT += (cible - armoryT) * 0.12;
+            if (Math.abs(cible - armoryT) < 0.001) armoryT = cible;
+            if (!armoryOuvert) armoryItemSurvole = false;
+            if (armoryT > 0.01 && !armoryItemSurvole) armoryAngle += armoryVitesse;
+
+            const c = armoryCentre();
+            const n = ARMORY_ITEMS.length;
+            itemEls.forEach((el, i) => {
+                const a = armoryAngle + i * TAU / n;
+                const r = ARMORY_R * armoryT;
+                const x = c.x + Math.cos(a) * r;
+                const y = c.y + Math.sin(a) * r;
+                const s = 0.85 + 0.25 * (1 + Math.cos(a + Math.PI / 2)) / 2; // plus grand en haut
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+                el.style.transform = `translate(-50%, -50%) scale(${s.toFixed(3)})`;
+                el.style.opacity = armoryT.toFixed(3);
+                el.style.pointerEvents = armoryT > 0.6 ? 'auto' : 'none';
+            });
+        }
+
+        function majItemsEquipes() {
+            itemEls.forEach((el, i) => el.classList.toggle('equipe', ARMORY_ITEMS[i].id === armoryEquipeId));
+        }
+
+        function drawArmory() {
+            const c = armoryCentre();
+            const t = armoryT;
+            const n = ARMORY_ITEMS.length;
+            ctx.save();
+            ctx.shadowBlur = 12; ctx.shadowColor = couleurHologramme;
+            ctx.strokeStyle = couleurHologramme; ctx.fillStyle = couleurHologramme;
+
+            if (t > 0.01) {
+                ctx.globalAlpha = t;
+                // disque sombre
+                ctx.fillStyle = 'rgba(5,11,20,0.72)';
+                ctx.beginPath(); ctx.arc(c.x, c.y, (ARMORY_R + 58) * t, 0, TAU); ctx.fill();
+                // anneau principal
+                ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.arc(c.x, c.y, ARMORY_R * t, 0, TAU); ctx.stroke();
+                // anneau extérieur pointillé qui tourne
+                ctx.setLineDash([4, 8]); ctx.lineDashOffset = -angle * 40;
+                ctx.beginPath(); ctx.arc(c.x, c.y, (ARMORY_R + 52) * t, 0, TAU); ctx.stroke();
+                ctx.setLineDash([]);
+                // rayons vers chaque outil
+                ctx.globalAlpha = t * 0.5;
+                for (let i = 0; i < n; i++) {
+                    const a = armoryAngle + i * TAU / n;
+                    ctx.beginPath();
+                    ctx.moveTo(c.x + Math.cos(a) * 46, c.y + Math.sin(a) * 46);
+                    ctx.lineTo(c.x + Math.cos(a) * (ARMORY_R - 38) * t, c.y + Math.sin(a) * (ARMORY_R - 38) * t);
+                    ctx.stroke();
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            // moyeu central (le rond du bas)
+            const rHub = 34 * (1 + 0.25 * t);
+            ctx.fillStyle = 'rgba(5,11,20,0.8)';
+            ctx.beginPath(); ctx.arc(c.x, c.y, rHub, 0, TAU); ctx.fill();
+            ctx.strokeStyle = couleurHologramme; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(c.x, c.y, rHub, 0, TAU); ctx.stroke();
+            ctx.lineWidth = 1;
+            ctx.setLineDash([6, 6]); ctx.lineDashOffset = angle * 30;
+            ctx.beginPath(); ctx.arc(c.x, c.y, rHub + 8, 0, TAU); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = couleurHologramme;
+            ctx.font = "9px 'Courier New', monospace"; ctx.textAlign = "center";
+            ctx.fillText("ARMORY", c.x, c.y + 3);
+
+            if (t > 0.5) {
+                ctx.globalAlpha = (t - 0.5) * 2;
+                const eq = ARMORY_ITEMS.find(it => it.id === armoryEquipeId);
+                ctx.fillText("ÉQUIPÉ : " + (eq ? eq.label : "AUCUN"), c.x, c.y + 62);
+                ctx.font = "8px 'Courier New', monospace";
+                ctx.fillText("MOLETTE / ← →  : FAIRE TOURNER", c.x, c.y - 56);
+                ctx.globalAlpha = 1;
+            }
+            ctx.restore();
+        }
+
+        // ============================================================
+        //  MODE COMBAT
+        // ============================================================
+        const MUN_MAX = 30;
+        let munitions = MUN_MAX;
+        let rechargeEnCours = false;
+        let score = 0;
+        let bouclier = 100;
+        let alerteBouclier = false;
+        const tirs = [];   // lasers à l'écran
+        const fx = [];     // explosions d'impact
+
+        function majPanneauCombat() {
+            document.getElementById('cp-munitions').innerHTML = 'MUNITIONS: ' + (rechargeEnCours ? 'RECHARGE...' : munitions + '/' + MUN_MAX);
+            document.getElementById('cp-score').innerHTML = 'CIBLES NEUTRALISÉES: ' + score;
+            document.getElementById('cp-bouclier').innerHTML = 'BOUCLIER: ' + Math.round(bouclier) + '%';
+        }
+
+        function basculerCombat(actif) {
+            if (explosionEnCours || actif === combatActif) return;
+            combatActif = actif;
+            radar.blips = [];
+            tirs.length = 0; fx.length = 0;
+            const panneau = document.getElementById('combat-panel');
+            if (actif) {
+                munitions = MUN_MAX; rechargeEnCours = false; score = 0; bouclier = 100; alerteBouclier = false;
+                panneau.style.display = 'flex';
+                document.getElementById('system-status').innerHTML = '[COMBAT] MODE COMBAT ACTIF - CLIQUE POUR TIRER, [R] RECHARGER';
+                playBipSonore(400, 0.25);
+                parlerJarvis("Mode combat activé. Radar en alerte maximale.");
+            } else {
+                panneau.style.display = 'none';
+                document.getElementById('system-status').innerHTML = '[COMBAT] MODE COMBAT DÉSACTIVÉ';
+                playBipSonore(700, 0.15);
+                parlerJarvis("Mode combat désactivé.");
+            }
+            appliquerCouleur();
+            majPanneauCombat();
+        }
+
+        function recharger() {
+            if (rechargeEnCours || munitions === MUN_MAX) return;
+            rechargeEnCours = true;
+            document.getElementById('system-status').innerHTML = '[COMBAT] RECHARGE EN COURS...';
+            playBipSonore(300, 0.3);
+            majPanneauCombat();
+            setTimeout(() => {
+                munitions = MUN_MAX; rechargeEnCours = false;
+                if (combatActif) document.getElementById('system-status').innerHTML = '[COMBAT] ARME PRÊTE';
+                majPanneauCombat();
+            }, 1500);
+        }
+
+        function tirer(mx, my) {
+            if (rechargeEnCours) return;
+            if (munitions <= 0) { recharger(); return; }
+            munitions--;
+            playTir();
+            tirs.push({ x0: width / 2, y0: height - 70, x1: mx, y1: my, vie: 8 });
+
+            // Touche : on vise un point rouge sur le radar
+            for (let i = radar.blips.length - 1; i >= 0; i--) {
+                const b = radar.blips[i];
+                if (!b.hostile) continue;
+                const p = blipPos(b);
+                if (Math.hypot(mx - p.x, my - p.y) < 14) {
+                    radar.blips.splice(i, 1);
+                    score++;
+                    fx.push({ x: p.x, y: p.y, vie: 20 });
+                    playBipSonore(900, 0.12);
+                    document.getElementById('system-status').innerHTML = '[COMBAT] CIBLE NEUTRALISÉE';
+                    break;
+                }
+            }
+            if (munitions === 0) recharger();
+            majPanneauCombat();
+        }
+
+        function subirDegats() {
+            bouclier = Math.max(0, bouclier - 12);
+            playBipSonore(120, 0.3);
+            document.getElementById('system-status').innerHTML = '[ALERTE] IMPACT ! BOUCLIER : ' + Math.round(bouclier) + '%';
+            const hudEl = document.getElementById('hud');
+            hudEl.classList.add('secousse-critique');
+            setTimeout(() => { if (!explosionEnCours) hudEl.classList.remove('secousse-critique'); }, 350);
+            if (bouclier === 0 && !alerteBouclier) {
+                alerteBouclier = true;
+                parlerJarvis("Bouclier hors service, Monsieur.");
+            }
+            majPanneauCombat();
+        }
+
+        function drawCombatFX() {
+            ctx.save();
+            // lasers
+            for (let i = tirs.length - 1; i >= 0; i--) {
+                const t = tirs[i];
+                ctx.globalAlpha = t.vie / 8;
+                ctx.strokeStyle = ROUGE_COMBAT; ctx.shadowBlur = 14; ctx.shadowColor = ROUGE_COMBAT; ctx.lineWidth = 2.5;
+                ctx.beginPath(); ctx.moveTo(t.x0, t.y0); ctx.lineTo(t.x1, t.y1); ctx.stroke();
+                if (--t.vie <= 0) tirs.splice(i, 1);
+            }
+            // explosions
+            for (let i = fx.length - 1; i >= 0; i--) {
+                const f = fx[i];
+                ctx.globalAlpha = f.vie / 20;
+                ctx.strokeStyle = '#ffffff'; ctx.shadowBlur = 12; ctx.shadowColor = ROUGE_COMBAT; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(f.x, f.y, (20 - f.vie) * 1.4 + 4, 0, TAU); ctx.stroke();
+                if (--f.vie <= 0) fx.splice(i, 1);
+            }
+            ctx.restore();
+
+            // réticule de visée
+            if (combatActif && armoryT < 0.2 && !explosionEnCours) {
+                ctx.save();
+                ctx.translate(mouseX, mouseY);
+                ctx.strokeStyle = ROUGE_COMBAT; ctx.fillStyle = ROUGE_COMBAT;
+                ctx.shadowBlur = 10; ctx.shadowColor = ROUGE_COMBAT; ctx.lineWidth = 1.5;
+                ctx.rotate(angle * 1.5);
+                ctx.setLineDash([8, 6]);
+                ctx.beginPath(); ctx.arc(0, 0, 30, 0, TAU); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.rotate(-angle * 1.5);
+                for (let k = 0; k < 4; k++) {
+                    ctx.rotate(Math.PI / 2);
+                    ctx.beginPath(); ctx.moveTo(36, 0); ctx.lineTo(50, 0); ctx.stroke();
+                }
+                ctx.font = "9px 'Courier New', monospace"; ctx.textAlign = "center";
+                ctx.fillText("TARGET LOCK", 0, -58);
+                ctx.restore();
+            }
+        }
+
+        // ============================================================
+        //  SOURIS
+        // ============================================================
+        document.addEventListener('mousemove', (e) => {
+            const distanceAuCentre = Math.hypot(e.clientX - width / 2, e.clientY - height / 2);
+            if (distanceAuCentre < 180) {
+                if (zoomCoeur === 1 && audioCtx) playBipSonore(1500, 0.05);
+                zoomCoeur = 1.35;
+            } else { zoomCoeur = 1; }
+
+            if (!explosionEnCours) {
+                if (e.clientX > width * 0.65) {
+                    if (!armureSurvolee && audioCtx) playBipSonore(1800, 0.08);
+                    armureSurvolee = true; vitesseRotationArmure = 0.04;
+                } else { armureSurvolee = false; vitesseRotationArmure = 0.005; }
+            }
+        });
+
+        const viseur = document.getElementById('viseur-laser');
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            viseur.style.left = mouseX + 'px'; viseur.style.top = mouseY + 'px';
+            if (Math.random() < 0.02 && audioCtx) { playBipSonore(2000, 0.01); }
+            testZoneArmory(mouseX, mouseY);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            viseur.style.width = '14px'; viseur.style.height = '14px'; viseur.style.borderColor = '#ff3366';
+            playBipSonore(1300, 0.04);
+            // Tir en mode combat (pas quand on clique sur le carrousel)
+            if (combatActif && systemeInitialise && !explosionEnCours && armoryT < 0.2 && !e.target.closest('.armory-item')) {
+                tirer(e.clientX, e.clientY);
+            }
+        });
+        document.addEventListener('mouseup', () => {
+            viseur.style.width = '26px'; viseur.style.height = '26px'; viseur.style.borderColor = '';
+        });
+
+        // La molette fait tourner le carrousel quand il est ouvert
+        document.addEventListener('wheel', (e) => {
+            if (armoryOuvert) armoryAngle += e.deltaY * 0.003;
+        }, { passive: true });
+
+        // ============================================================
+        //  BOUCLE DE RENDU PRINCIPALE
+        // ============================================================
+        function updateAndRender() {
+            ctx.clearRect(0, 0, width, height);
+            if (!systemeInitialise) { requestAnimationFrame(updateAndRender); return; }
+
+            frame++;
+            angle += 0.02;
+            zoomActuel += (zoomCoeur - zoomActuel) * vitesseAmortissement;
+            const ancienneTailleZoom = zoomCoeur; zoomCoeur = zoomActuel;
+
+            drawHologram(120);
+            angleArmure += vitesseRotationArmure; drawArmor();
+
+            zoomCoeur = ancienneTailleZoom;
+
+            // Radar
+            majRadar(); drawRadar();
+
+            // Régénération du bouclier en combat
+            if (combatActif && !explosionEnCours && bouclier < 100) bouclier = Math.min(100, bouclier + 0.02);
+            if (bouclier > 30) alerteBouclier = false;
+            if (combatActif && frame % 6 === 0) majPanneauCombat();
+
+            // Armurerie (rond + carrousel)
+            majArmory(); drawArmory();
+
+            // Lasers, explosions, réticule
+            drawCombatFX();
+
+            requestAnimationFrame(updateAndRender);
+        }
+        requestAnimationFrame(updateAndRender);
+
+        // ============================================================
+        //  VOIX DE J.A.R.V.I.S.
+        // ============================================================
+        function parlerJarvis(texte) {
+            window.speechSynthesis.cancel();
+            const message = new SpeechSynthesisUtterance(texte);
+            message.lang = 'fr-FR'; message.pitch = 0.82; message.rate = 1.05;
+            window.speechSynthesis.speak(message);
+        }
+
+        // ============================================================
+        //  CAPTEURS (heure, date, batterie)
+        // ============================================================
+        function mettreAJourHorloge() {
+            const m = new Date();
+            document.getElementById('live-time').innerHTML = `HEURE : ${m.toLocaleTimeString('fr-FR')}`;
+            document.getElementById('live-date').innerHTML = `DATE : ${m.toLocaleDateString('fr-FR')}`;
+        }
+        setInterval(mettreAJourHorloge, 1000);
+
+        function connecterBatterie() {
+            if (navigator.getBattery) {
+                navigator.getBattery().then((b) => {
+                    const upd = () => {
+                        const n = Math.round(b.level * 100);
+                        document.getElementById('battery-status').innerHTML = `RÉACTEUR ARC : ${n}%`;
+                        document.getElementById('battery-bar').style.width = `${n}%`;
+                    };
+                    upd(); b.addEventListener('levelchange', upd);
+                });
+            } else { document.getElementById('battery-status').innerHTML = `RÉACTEUR ARC : 100% (STABLE)`; }
+        }
+
+        // ============================================================
+        //  ÉQUIPEMENTS
+        // ============================================================
+        function chargerArmure(nom, col, forme, id) {
+            document.getElementById('system-status').innerHTML = `[ACCÈS] DÉPLOIEMENT : ${nom}`;
+            couleurNormale = col;
+            formeActuelle = forme;
+            armoryEquipeId = id || null;
+            majItemsEquipes();
+            appliquerCouleur();
+            parlerJarvis(`Protocole ${nom} en cours de synchronisation.`);
+        }
+
+        function equiperParId(id) {
+            const it = ARMORY_ITEMS.find(x => x.id === id);
+            if (!it) return;
+            playBipSonore(600, 0.12);
+            chargerArmure(it.nom, it.col, it.forme, it.id);
+        }
+
+        // ============================================================
+        //  RACCOURCIS CLAVIER
+        //  1-6 : équiper | C : mode combat | R : recharger | ← → : carrousel
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('hud').style.display === 'none') return;
+            if (explosionEnCours) return;
+            const k = e.key.toLowerCase();
+            if (k >= '1' && k <= '6') { equiperParId(ARMORY_ITEMS[parseInt(k) - 1].id); }
+            else if (k === 'c') { basculerCombat(!combatActif); }
+            else if (k === 'r' && combatActif) { recharger(); }
+            else if (e.key === 'ArrowRight') { armoryAngle += 0.35; }
+            else if (e.key === 'ArrowLeft') { armoryAngle -= 0.35; }
+        });
+
+        // ============================================================
+        //  FLUX DE DONNÉES MATRIX + FAUX SCAN BIOMÉTRIQUE
+        // ============================================================
+        function LancerFluxDonnees() {
+            const matrixBox = document.getElementById('matrix-box');
+            const matrixLines = document.getElementById('matrix-lines');
+            if (!matrixBox || !matrixLines) return;
+
+            matrixBox.style.display = "block";
+            let lignesMax = 0;
+
+            const constFluxLogs = ["STARK LINK: OK", "POWER RESERVE: 100%", "JARVIS BRAIN: 98%", "SHIELD INTEGRITY: 100%", "ARC_TEMP: 3600K"];
+
+            setInterval(() => {
+                if (!systemeInitialise) return;
+                lignesMax++;
+                if (lignesMax > 20) {
+                    matrixLines.innerHTML = "";
+                    lignesMax = 0;
+                }
+                const ligne = constFluxLogs[Math.floor(Math.random() * constFluxLogs.length)];
+                matrixLines.innerHTML += ligne + "<br>";
+                if (audioCtx) playBipSonore(300, 0.05);
+            }, 500);
+        }
+
+        function lancerFauxScanBiometrique() {
+            const statusCam = document.getElementById('status-camera');
+            const systemStatus = document.getElementById('system-status');
+            const bioBox = document.getElementById('biometric-box');
+            setTimeout(() => {
+                statusCam.innerHTML = "SUCCÈS"; statusCam.style.color = "#33ff55"; bioBox.style.borderColor = "#33ff55";
+                systemStatus.innerHTML = "[SÉCURITÉ] ACCÈS AUTORISÉ : DYLAN RECONNU.";
+                if (audioCtx) playBipSonore(1000, 0.3);
+                parlerJarvis("Profil biométrique confirmé. Bienvenue Monsieur DYLAN.");
+                bioBox.style.opacity = "0"; bioBox.style.transform = "translateX(-50px)";
+                setTimeout(() => { bioBox.style.display = "none"; LancerFluxDonnees(); }, 800);
+            }, 4000);
+        }
+
+        // ============================================================
+        //  RECONNAISSANCE VOCALE J.A.R.V.I.S.
+        // ============================================================
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let reconnaissance = null;
+
+        if (SpeechRecognition) {
+            reconnaissance = new SpeechRecognition();
+            reconnaissance.lang = 'fr-FR';
+            reconnaissance.continuous = true;
+            reconnaissance.interimResults = false;
+
+            reconnaissance.onresult = (event) => {
+                const dernierIndex = event.results.length - 1;
+
+                if (event.results[dernierIndex] && event.results[dernierIndex][0]) {
+                    const phrase = event.results[dernierIndex][0].transcript.toLowerCase().trim();
+                    document.getElementById('system-status').innerHTML = `[VOCAL] REÇU : "${phrase}"`;
+
+                    // Pendant l'auto-destruction, on ignore les autres commandes
+                    if (explosionEnCours) return;
+
+                    if (phrase.includes("jarvis") || phrase.includes("vis") || phrase.includes("service")) {
+
+                        if (phrase.includes("heure")) {
+                            const maintenant = new Date();
+                            parlerJarvis(`Il est actuellement ${maintenant.getHours()} heures ${maintenant.getMinutes()}.`);
+                        }
+                        else if (phrase.includes("date") || phrase.includes("jour")) {
+                            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                            parlerJarvis(`Aujourd'hui, nous sommes le ${new Date().toLocaleDateString('fr-FR', options)}.`);
+                        }
+                        else if (phrase.includes("statut") || phrase.includes("système")) {
+                            parlerJarvis("Tous les systèmes sont nominaux. Réacteur arc stable à 100%.");
+                        }
+                        else if (phrase.includes("tu es là") || phrase.includes("réveille-toi")) {
+                            parlerJarvis("Pour vous servir, Monsieur. Tous mes protocoles sont actifs.");
+                        }
+                        // --- MODE COMBAT ---
+                        else if (phrase.includes("combat") && (phrase.includes("fin") || phrase.includes("arrête") || phrase.includes("arrete") || phrase.includes("désactive") || phrase.includes("stop") || phrase.includes("quitte"))) {
+                            basculerCombat(false);
+                        }
+                        else if (phrase.includes("combat")) {
+                            basculerCombat(true);
+                        }
+                        // --- ALERTE (ordre important : "annule l'alerte" AVANT "alerte") ---
+                        else if (phrase.includes("annule l'alerte") || phrase.includes("fin d'alerte") || phrase.includes("normal")) {
+                            playBipSonore(500, 0.1); equiperParId('furtif');
+                            parlerJarvis("Alerte annulée. Retour aux paramètres de sécurité standard.");
+                        }
+                        else if (phrase.includes("code rouge") || phrase.includes("alerte")) {
+                            chargerArmure('ALERTE INTRUSION', '#ff0000', 'danger', null);
+                            if (audioCtx) { playBipSonore(150, 0.5); }
+                            parlerJarvis("Alerte de niveau 5. Déploiement des boucliers thermiques.");
+                        }
+                        // --- ÉQUIPEMENTS ---
+                        else if (phrase.includes("classic") || phrase.includes("mac 10") || phrase.includes("mak 10") || phrase.includes("rouge")) {
+                            equiperParId('mak10');
+                        }
+                        else if (phrase.includes("carnage") || phrase.includes("verte")) {
+                            equiperParId('carnage');
+                        }
+                        else if (phrase.includes("furtif") || phrase.includes("ghost") || phrase.includes("bleu")) {
+                            equiperParId('furtif');
+                        }
+                        else if (phrase.includes("missile")) {
+                            equiperParId('missile');
+                        }
+                        else if (phrase.includes("bouclier")) {
+                            equiperParId('bouclier');
+                        }
+                        else if (phrase.includes("drone")) {
+                            equiperParId('drone');
+                        }
+                        // --- AUTO-DESTRUCTION : uniquement sur "destruction" ou "boom" ---
+                        else if (phrase.includes("destruction") || phrase.includes("boom")) {
+                            window.speechSynthesis.cancel();
+                            chargerArmure('CRITICAL_OVERRIDE', '#ff0000', 'danger', null);
+                            parlerJarvis("Protocole d'auto-destruction activé. Amorçage des charges thermiques. C'était un honneur, DYLAN.");
+                            setTimeout(() => { LancerSequenceExplosion(); }, 7000);
+                        }
+                        else if (phrase.includes("silence") || phrase.includes("tais-toi")) {
+                            window.speechSynthesis.cancel();
+                        }
+                        else if (phrase.includes("plus fort") || phrase.includes("meilleur")) {
+                            parlerJarvis("C'est statistiquement vous, Monsieur. Bien que capitaine America prétende le contraire.");
+                        }
+                        else if (phrase.includes("blague") || phrase.includes("humour")) {
+                            parlerJarvis("Combien font 0 plus 0 ? Demande à ton père");
+                        }
+                        else if (phrase.includes("merci")) {
+                            parlerJarvis("Je vous en prie, Monsieur. C'est toujours un plaisir.");
+                        }
+                    }
+                }
+            };
+
+            // Le micro se relance tout seul tant que le système est actif
+            reconnaissance.onend = () => {
+                if (systemeInitialise) {
+                    try { reconnaissance.start(); } catch (e) { }
+                }
+            };
+        }
+
+        function activerMicroJarvis() {
+            if (reconnaissance && systemeInitialise) {
+                try { reconnaissance.start(); } catch (e) { console.log("Déjà actif"); }
+            }
+        }
+
+        // ============================================================
+        //  SÉQUENCE D'AUTO-DESTRUCTION (compte à rebours + explosion)
+        // ============================================================
+        function LancerSequenceExplosion() {
+            if (explosionEnCours) return;
+            explosionEnCours = true;
+
+            // On coupe le combat et l'armurerie
+            combatActif = false;
+            armoryOuvert = false;
+            radar.blips = []; tirs.length = 0; fx.length = 0;
+            document.getElementById('combat-panel').style.display = 'none';
+
+            let compte = 5;
+            const hudElement = document.getElementById('hud');
+            const screenSaver = document.getElementById('screen-saver-text');
+
+            vitesseRotationArmure = 0.25;
+            armureSurvolee = true;
+            hudElement.classList.add('secousse-critique');
+
+            screenSaver.style.display = 'block';
+            screenSaver.style.opacity = '1';
+            screenSaver.style.zIndex = '50';
+            screenSaver.innerHTML = `<h2 style="color: #ff3333; font-size: 24px; text-shadow: 0 0 10px #ff0000;">[CRITICAL] COLLAPSE IMMINENT IN ${compte}...</h2>`;
+            if (audioCtx) playBipSonore(258, 0.4);
+
+            const compteArebours = setInterval(() => {
+                compte--;
+
+                if (compte > 0) {
+                    screenSaver.innerHTML = `<h2 style="color: #ff3333; font-size: 24px; text-shadow: 0 0 10px #ff0000;">[CRITICAL] COLLAPSE IMMINENT IN ${compte}...</h2>`;
+                    if (audioCtx) playBipSonore(258 + (5 - compte) * 50, 0.4);
+                    couleurHologramme = (compte % 2 === 0) ? '#ff0000' : '#ff9999';
+                }
+                else {
+                    clearInterval(compteArebours);
+
+                    systemeInitialise = false;
+                    hudElement.classList.remove('secousse-critique');
+                    hudElement.style.display = 'none';
+                    armoryLayer.style.display = 'none';
+                    ctx.clearRect(0, 0, width, height);
+                    try { reconnaissance && reconnaissance.stop(); } catch (e) { }
+
+                    if (audioCtx) playBipSonore(70, 2.0);
+
+                    document.body.style.backgroundColor = '#000000';
+                    screenSaver.style.pointerEvents = 'auto';
+                    screenSaver.style.opacity = '1';
+                    screenSaver.style.zIndex = '200';
+                    screenSaver.style.display = 'block';
+
+                    screenSaver.innerHTML = `
+                        <div style="text-align: center; padding-top: 20vh;">
+                            <h2 style="font-size: 38px; color: #ff3333; text-shadow: 0 0 20px #ff0000; margin: 0; animation: blink 1s steps(2, start) infinite;">[ SYSTEM TERMINATED ]</h2>
+                            <p style="color: #888; font-size: 12px; margin-top: 15px; margin-bottom: 25px;">CONNEXION PERDUE AVEC LE RÉACTEUR ARC // CODE D'URGENCE 0x59F4</p>
+                            <button class="btn-stark-rearm" id="btn-rearm">RÉARMER LE RÉACTEUR ARC</button>
+                        </div>
+                    `;
+
+                    document.getElementById('btn-rearm').addEventListener('click', rearmerSysteme);
+                }
+            }, 1000);
+        }
+
+        // Flash blanc puis rechargement de la page = tout est remis à zéro
+        function rearmerSysteme() {
+            const f = document.createElement('div');
+            f.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:#fff;z-index:99998;transition:opacity .6s';
+            document.body.appendChild(f);
+            setTimeout(() => { f.style.opacity = 0; window.location.reload(); }, 50);
+        }
+
+        // ============================================================
+        //  DÉMARRAGE (bouton INITIALISER)
+        // ============================================================
+        document.getElementById('btn-init').addEventListener('click', () => {
+            initAudio();
+            playScanLaser();
+            document.getElementById('preheat-container').style.display = 'none';
+            document.getElementById('btn-init').style.display = 'none';
+            document.getElementById('hud').style.display = 'block';
+            armoryLayer.style.display = 'block';
+            systemeInitialise = true;
+            mettreAJourHorloge();
+            connecterBatterie();
+            parlerJarvis("Analyse biométrique de sécurité en cours.");
+            lancerFauxScanBiometrique();
+            activerMicroJarvis();
+        });
+
+        // ============================================================
+        //  ANIMATION DU PRÉCHAUFFAGE DES PROPULSEURS (écran d'accueil)
+        // ============================================================
+        let chargePreheat = 0;
+        const barL = document.getElementById('preheat-bar-l');
+        const barR = document.getElementById('preheat-bar-r');
+        const valL = document.getElementById('preheat-val-l');
+        const valR = document.getElementById('preheat-val-r');
+
+        setInterval(() => {
+            if (systemeInitialise) return;
+            chargePreheat += 1;
+            if (chargePreheat > 100) chargePreheat = 0;
+            barL.style.width = chargePreheat + '%';
+            barR.style.width = chargePreheat + '%';
+            valL.innerHTML = chargePreheat;
+            valR.innerHTML = chargePreheat;
+        }, 80);
+    </script>
+</body>
+
+</html>
