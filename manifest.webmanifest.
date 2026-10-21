@@ -1,0 +1,17 @@
+{
+  "name": "J.A.R.V.I.S. - Zeyrox Industries",
+  "short_name": "JARVIS",
+  "description": "Mon JARVIS personnel : cœur holographique, armurerie, radar et mode combat.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#050b14",
+  "theme_color": "#050b14",
+  "lang": "fr",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
