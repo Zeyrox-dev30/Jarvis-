@@ -1,4 +1,4 @@
-const CACHE = 'jarvis-v1';
+const CACHE = 'jarvis-v2';
 const FICHIERS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
