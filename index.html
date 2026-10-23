@@ -351,9 +351,9 @@
             .hud-container { margin: 8px; padding: 10px; height: calc(100vh - 40px); height: calc(100dvh - 40px); }
             h1 { font-size: 13px; letter-spacing: 2px; }
             #system-status { font-size: 10px; margin: 6px 0 0; }
-            .armory-menu { top: 128px; left: 10px; gap: 4px; font-size: 10px; }
+            .armory-menu { top: 142px; left: 10px; gap: 4px; font-size: 10px; }
             .armory-title { font-size: 10px; margin-bottom: 2px; }
-            .widget-stats { top: 128px; right: 10px; width: 118px; padding: 8px; font-size: 10px; }
+            .widget-stats { top: 142px; right: 10px; width: 118px; padding: 8px; font-size: 10px; }
             .widget-stats p { margin: 4px 0; }
             .widget-energie { bottom: 10px; right: 10px; padding: 6px; font-size: 9px; }
             .widget-camera { width: 130px; height: 90px; bottom: 70px; left: 10px; }
@@ -363,6 +363,10 @@
         }
 
         /* Pas de viseur laser sur écran tactile */
+        @media (min-width: 821px) {
+            #combat-panel { top: auto; bottom: 130px; }
+        }
+
         @media (pointer: coarse) {
             #viseur-laser { display: none; }
         }
@@ -561,6 +565,221 @@
             .ee-titre { font-size: 13px; letter-spacing: 2px; margin-top: 12px; }
             .ca-icone { font-size: 22px; width: 30px; }
         }
+
+        /* --- Champ prénom, boutons de réglage --- */
+        input {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            touch-action: auto !important;
+        }
+
+        #champ-prenom,
+        .ee-cadre input {
+            background: rgba(5, 11, 20, 0.7);
+            border: 1px solid var(--stark-color);
+            color: var(--stark-color);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            letter-spacing: 2px;
+            padding: 10px 12px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        #champ-prenom {
+            position: absolute;
+            top: 58%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(320px, 80vw);
+            text-align: center;
+            z-index: 100;
+        }
+
+        #champ-prenom::placeholder,
+        .ee-cadre input::placeholder {
+            color: var(--stark-color);
+            opacity: 0.45;
+        }
+
+        .btn-reg {
+            --c: var(--stark-color);
+            background: rgba(5, 11, 20, 0.7);
+            border: 1px solid var(--c);
+            color: var(--c);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 9px 12px;
+            font-weight: bold;
+        }
+
+        .btn-reg:hover,
+        .btn-reg.actif {
+            background: var(--c);
+            color: #050b14;
+        }
+
+        .ligne-outil {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 6px 0 10px;
+            align-items: center;
+        }
+
+        .ligne-outil input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .grille-liens {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .lien-app {
+            display: block;
+            border: 1px solid var(--stark-color);
+            color: var(--stark-color);
+            text-decoration: none;
+            padding: 10px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            font-weight: bold;
+            background: rgba(5, 11, 20, 0.7);
+        }
+
+        .lien-app:hover {
+            background: var(--stark-color);
+            color: #050b14;
+        }
+
+        /* --- Séquence de démarrage --- */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 150;
+            background-color: #050b14;
+            display: none;
+            box-sizing: border-box;
+            padding: 8vh 6vw;
+            color: var(--stark-color);
+            font-size: 12px;
+            line-height: 1.9;
+            letter-spacing: 1px;
+            transition: opacity 0.4s;
+            text-shadow: 0 0 6px var(--stark-color);
+        }
+
+        #boot-cadre {
+            position: absolute;
+            left: 6vw;
+            right: 6vw;
+            bottom: 12vh;
+            height: 10px;
+            border: 1px solid var(--stark-color);
+        }
+
+        #boot-barre {
+            height: 100%;
+            width: 0;
+            background: var(--stark-color);
+            box-shadow: 0 0 10px var(--stark-color);
+            transition: width 0.2s;
+        }
+
+        #boot-hint {
+            position: absolute;
+            bottom: 6vh;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 10px;
+            opacity: 0.5;
+        }
+
+        /* --- Lien à toucher, écran de fin, bouton STOP --- */
+        #toast-lien {
+            position: fixed;
+            left: 50%;
+            bottom: 140px;
+            transform: translateX(-50%);
+            display: none;
+            z-index: 70;
+            border: 2px solid var(--stark-color);
+            background: rgba(5, 11, 20, 0.92);
+            color: var(--stark-color);
+            padding: 14px 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-decoration: none;
+            box-shadow: 0 0 18px var(--glow-shadow);
+        }
+
+        #fin-combat {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 55;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 11, 20, 0.86);
+        }
+
+        .fc-boite {
+            width: min(340px, 86vw);
+            border: 2px solid #ff2244;
+            box-shadow: 0 0 22px rgba(255, 34, 68, 0.5);
+            padding: 20px;
+            color: #ff2244;
+            background: #050b14;
+        }
+
+        .fc-titre {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 14px;
+            text-shadow: 0 0 10px #ff2244;
+        }
+
+        .fc-boutons {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            justify-content: center;
+        }
+
+        .fc-boite .btn-reg {
+            --c: #ff2244;
+        }
+
+        #cp-stop {
+            pointer-events: auto;
+            background: #ff2244;
+            color: #050b14;
+            border: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 3px 10px;
+        }
+
+        #live-timer {
+            color: #ffc933;
+        }
     </style>
 </head>
 
@@ -596,18 +815,36 @@
     </div>
 
     <button class="btn-stark-init" id="btn-init">INITIALISER LE SYSTÈME ZEYROX</button>
+    <input id="champ-prenom" placeholder="TON PRÉNOM (OPTIONNEL)" maxlength="20" autocomplete="off">
 
     <!-- Panneau du mode combat -->
     <div id="combat-panel">
         <div class="cp-titre">⚠ MODE COMBAT ACTIF</div>
+        <div id="cp-vague">VAGUE: 1</div>
         <div id="cp-arme">ARME: --</div>
         <div id="cp-munitions">MUNITIONS: --</div>
-        <div id="cp-score">CIBLES NEUTRALISÉES: 0</div>
+        <div id="cp-score">SCORE: 0</div>
         <div id="cp-bouclier">BOUCLIER: 100%</div>
+        <button id="cp-stop">■ STOP</button>
     </div>
 
     <!-- Couche des éléments du carrousel d'armurerie -->
     <div id="armory-layer"></div>
+
+    <!-- Séquence de démarrage -->
+    <div id="boot-screen"><div id="boot-lignes"></div><div id="boot-cadre"><div id="boot-barre"></div></div><div id="boot-hint">TOUCHE POUR PASSER</div></div>
+
+    <!-- Lien prêt à toucher (si le navigateur bloque l'ouverture automatique) -->
+    <a id="toast-lien" href="#" target="_blank" rel="noopener"></a>
+
+    <!-- Écran de fin de combat -->
+    <div id="fin-combat"><div class="fc-boite">
+        <div class="fc-titre">MISSION TERMINÉE</div>
+        <div class="sy-ligne"><span>VAGUE ATTEINTE</span><b id="fc-vague">0</b></div>
+        <div class="sy-ligne"><span>SCORE</span><b id="fc-score">0</b></div>
+        <div class="sy-ligne"><span>RECORD</span><b id="fc-record">0</b></div>
+        <div class="fc-boutons"><button class="btn-reg" id="fc-rejouer">REJOUER</button><button class="btn-reg" id="fc-quitter">QUITTER</button></div>
+    </div></div>
 
     <!-- Indicateur d'écrans (glisser gauche / droite) -->
     <div id="page-dots"></div>
@@ -645,6 +882,7 @@
             <div class="armory-title">// CAPTEURS REELS</div>
             <p id="live-time">HEURE : --:--:--</p>
             <p id="live-date">DATE : --/--/----</p>
+            <p id="live-timer" style="display:none">MINUTEUR : --</p>
         </div>
 
         <div class="widget-energie">
@@ -657,11 +895,12 @@
         // ============================================================
         //  MOTEUR AUDIO SYNTHÉ
         // ============================================================
+        let sonActif = true, voixActive = true;
         let audioCtx = null;
         function initAudio() { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
         function playBipSonore(freq, duree) {
-            if (!audioCtx) return;
+            if (!audioCtx || !sonActif) return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
@@ -671,7 +910,7 @@
         }
 
         function playScanLaser() {
-            if (!audioCtx) return;
+            if (!audioCtx || !sonActif) return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.5);
@@ -683,7 +922,7 @@
 
         // Son de tir (mode combat)
         function playTir() {
-            if (!audioCtx) return;
+            if (!audioCtx || !sonActif) return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'sawtooth'; osc.frequency.setValueAtTime(1100, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.14);
@@ -746,7 +985,9 @@
                 LAY.k = k;
                 LAY.coeurX = width / 2; LAY.coeurY = height / 2; LAY.coeurSize = 120 * k;
                 LAY.armX = width * 0.75; LAY.armY = height * 0.5; LAY.armScale = k;
-                LAY.radarX = 140 * Math.max(k, 0.75); LAY.radarY = height * 0.5 - 10 * k; LAY.radarR = 70 * Math.max(k, 0.7);
+                LAY.radarX = 140 * Math.max(k, 0.75); LAY.radarR = 70 * Math.max(k, 0.7);
+                if (height < 800) LAY.radarR = Math.min(LAY.radarR, 62);
+                LAY.radarY = Math.max(height * 0.5 - 10 * k, 304 + LAY.radarR + 22);
                 LAY.armoryR = Math.max(100, 150 * k); LAY.itemSize = Math.max(54, 74 * k);
                 LAY.hubBottom = height < 500 ? 48 : 70;
             }
@@ -906,21 +1147,18 @@
 
         function majRadar() {
             radar.balayage = (radar.balayage + 0.04) % TAU;
-
-            const max = combatActif ? 10 : 7;
-            if (radar.blips.length < max && Math.random() < (combatActif ? 0.012 : 0.007)) {
-                if (combatActif) {
-                    radar.blips.push({ a: Math.random() * TAU, r: 0.97, hostile: true, v: 0.0012 + Math.random() * 0.0012, vie: 99999 });
-                } else {
-                    radar.blips.push({ a: Math.random() * TAU, r: 0.15 + Math.random() * 0.8, hostile: false, v: 0, vie: 400 + Math.random() * 500 });
-                }
+            // En veille : quelques contacts neutres. En combat, ce sont les vagues qui font apparaître les ennemis.
+            if (!combatActif && radar.blips.length < 7 && Math.random() < 0.007) {
+                radar.blips.push({ a: Math.random() * TAU, r: 0.15 + Math.random() * 0.8, hostile: false, v: 0, vie: 400 + Math.random() * 500 });
             }
-
+            const lent = armoryEquipeId === 'furtif' ? 0.5 : 1;
             for (let i = radar.blips.length - 1; i >= 0; i--) {
                 const b = radar.blips[i];
                 if (b.hostile) {
-                    b.r -= b.v * (armoryEquipeId === 'furtif' ? 0.5 : 1); b.a += 0.002;
-                    if (b.r <= 0.08) { radar.blips.splice(i, 1); subirDegats(); }
+                    b.r -= b.v * lent; b.a += 0.002;
+                    if (b.r <= (b.boss ? 0.14 : 0.08)) { radar.blips.splice(i, 1); subirDegats(b.boss ? 40 : 12); }
+                } else if (b.bonus) {
+                    if (--b.vie <= 0) radar.blips.splice(i, 1);
                 } else {
                     b.vie--; b.a += 0.001;
                     if (b.vie <= 0) radar.blips.splice(i, 1);
@@ -965,6 +1203,7 @@
             // contacts
             let hostiles = 0;
             radar.blips.forEach(b => {
+                if (b.bonus) { dessinerBonus(b); return; }
                 const p = blipPos(b);
                 const diff = ((sw - b.a) % TAU + TAU) % TAU;
                 const alpha = 0.2 + 0.8 * (1 - diff / TAU);
@@ -972,9 +1211,9 @@
                 if (b.hostile) hostiles++;
                 ctx.globalAlpha = alpha;
                 ctx.fillStyle = col; ctx.shadowColor = col;
-                ctx.beginPath(); ctx.arc(p.x, p.y, b.hostile ? 3.5 : 2.5, 0, TAU); ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, b.boss ? 6 : (b.hostile ? 3.5 : 2.5), 0, TAU); ctx.fill();
                 if (b.hostile) {
-                    ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(p.x, p.y, 7, 0, TAU); ctx.stroke();
+                    ctx.strokeStyle = col; ctx.beginPath(); ctx.arc(p.x, p.y, b.boss ? 12 : 7, 0, TAU); ctx.stroke();
                 }
             });
             ctx.globalAlpha = 1;
@@ -1126,23 +1365,108 @@
         }
 
         // ============================================================
+        //  RÉGLAGES (sauvegardés dans le téléphone / le navigateur)
+        // ============================================================
+        function lire(cle, defaut) { try { const v = localStorage.getItem(cle); return v === null ? defaut : v; } catch (e) { return defaut; } }
+        function ecrire(cle, val) { try { localStorage.setItem(cle, String(val)); } catch (e) { } }
+        function esc(t) { return String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+        let prenom = lire('jarvis_prenom', '');
+        let ambiancePref = lire('jarvis_ambiance', '1') === '1';
+        sonActif = lire('jarvis_son', '1') === '1';
+        voixActive = lire('jarvis_voix', '1') === '1';
+        function nomAffiche() { return prenom ? prenom.toUpperCase() : 'OPÉRATEUR'; }
+        function appelAffiche() { return prenom || 'Monsieur'; }
+
+        const THEMES = [
+            { id: 'stark', nom: 'STARK', col: '#00f0ff' },
+            { id: 'or', nom: 'OR', col: '#ffc933' },
+            { id: 'vert', nom: 'MATRIX', col: '#33ff88' },
+            { id: 'violet', nom: 'VIOLET', col: '#b266ff' },
+            { id: 'glace', nom: 'GLACE', col: '#cfe9ff' }
+        ];
+        let themeId = lire('jarvis_theme', 'stark');
+        function appliquerTheme(id) {
+            const t = THEMES.find(x => x.id === id) || THEMES[0];
+            themeId = t.id; couleurNormale = t.col; ecrire('jarvis_theme', t.id);
+            appliquerCouleur();
+            if (typeof majReglages === 'function') majReglages();
+        }
+
+        // ============================================================
+        //  AMBIANCE SONORE (synthétisée, aucun fichier à charger)
+        // ============================================================
+        let ambiance = null;
+        function lancerAmbiance() {
+            if (!audioCtx || ambiance || !sonActif) return;
+            const sortie = audioCtx.createGain(); sortie.gain.value = 0.0001;
+            const filtre = audioCtx.createBiquadFilter(); filtre.type = 'lowpass'; filtre.frequency.value = 420; filtre.Q.value = 2;
+            filtre.connect(sortie); sortie.connect(audioCtx.destination);
+            const oscs = [];
+            [[55, 'sine', 0], [82.41, 'triangle', 4], [110, 'sine', -5], [164.81, 'triangle', 6]].forEach(([f, type, det]) => {
+                const o = audioCtx.createOscillator(); o.type = type; o.frequency.value = f; o.detune.value = det;
+                const g = audioCtx.createGain(); g.gain.value = type === 'sine' ? 0.6 : 0.25;
+                o.connect(g); g.connect(filtre); o.start(); oscs.push(o);
+            });
+            const lfo = audioCtx.createOscillator(); lfo.frequency.value = 0.08;
+            const lfoGain = audioCtx.createGain(); lfoGain.gain.value = 180;
+            lfo.connect(lfoGain); lfoGain.connect(filtre.frequency); lfo.start(); oscs.push(lfo);
+            sortie.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 2.5);
+            ambiance = { oscs: oscs, sortie: sortie };
+        }
+        function arreterAmbiance() {
+            if (!ambiance || !audioCtx) { ambiance = null; return; }
+            const a = ambiance; ambiance = null;
+            try {
+                a.sortie.gain.cancelScheduledValues(audioCtx.currentTime);
+                a.sortie.gain.setValueAtTime(a.sortie.gain.value, audioCtx.currentTime);
+                a.sortie.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
+            } catch (e) { }
+            setTimeout(() => a.oscs.forEach(o => { try { o.stop(); } catch (e) { } }), 900);
+        }
+        // Pulsation grave pendant le combat (seulement si l'ambiance est active)
+        setInterval(() => {
+            if (!ambiance || !combatActif || explosionEnCours || pageActuelle !== 0 || !audioCtx) return;
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = 'sine'; o.frequency.setValueAtTime(70, audioCtx.currentTime);
+            o.frequency.exponentialRampToValueAtTime(38, audioCtx.currentTime + 0.18);
+            g.gain.setValueAtTime(0.14, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.22);
+            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.25);
+        }, 650);
+
+        function basculerSon(v) {
+            sonActif = (v === undefined) ? !sonActif : v; ecrire('jarvis_son', sonActif ? '1' : '0');
+            if (!sonActif) arreterAmbiance(); else if (ambiancePref) lancerAmbiance();
+            majReglages();
+        }
+        function basculerVoix(v) {
+            voixActive = (v === undefined) ? !voixActive : v; ecrire('jarvis_voix', voixActive ? '1' : '0');
+            if (!voixActive) window.speechSynthesis.cancel();
+            majReglages();
+        }
+        function basculerAmbiance(v) {
+            ambiancePref = (v === undefined) ? !ambiancePref : v; ecrire('jarvis_ambiance', ambiancePref ? '1' : '0');
+            if (ambiancePref && sonActif) lancerAmbiance(); else arreterAmbiance();
+            majReglages();
+        }
+
+        // ============================================================
         //  ÉQUIPEMENTS : EFFETS EN COMBAT
         // ============================================================
         const ARMES = {
-            defaut:   { nom: "STANDARD", mun: 30, rayon: 16, kills: 1, desc: "Tir simple. Équipe un objet pour changer d'effet.", stats: "30 MUNITIONS · PRÉCIS" },
-            mak10:    { nom: "MAK 10", mun: 40, rayon: 16, kills: 1, auto: true, cadence: 110, desc: "Rafale automatique : maintiens le doigt (ou le clic) pour mitrailler.", stats: "40 MUNITIONS · CADENCE ÉLEVÉE" },
-            carnage:  { nom: "MODE CARNAGE", mun: 8, rayon: 62, kills: 99, desc: "Explosion de zone : détruit tous les ennemis autour du point touché.", stats: "8 MUNITIONS · ZONE LARGE" },
-            furtif:   { nom: "PROTOCOLE FURTIF", mun: 20, rayon: 16, kills: 1, silencieux: true, desc: "Tir silencieux. Les ennemis avancent 2 fois moins vite et le bouclier se régénère plus vite.", stats: "20 MUNITIONS · DISCRET" },
-            missile:  { nom: "LANCE-MISSILES", mun: 6, rayon: 78, kills: 99, projectile: true, rechargeMs: 2500, desc: "Un missile part vers ta cible et explose en grande zone après un court délai.", stats: "6 MISSILES · EXPLOSIF · RECHARGE LENTE" },
-            bouclier: { nom: "BOUCLIER ÉNERGÉTIQUE", mun: 20, rayon: 16, kills: 1, desc: "Un dôme protège le cœur : les impacts sont presque tous absorbés.", stats: "20 MUNITIONS · DÉFENSE x4" },
-            drone:    { nom: "ESCADRON DE DRONES", mun: 20, rayon: 16, kills: 1, desc: "3 drones patrouillent autour du radar et abattent les ennemis tout seuls.", stats: "3 DRONES · TIR AUTOMATIQUE" }
+            defaut:   { nom: "STANDARD", mun: 30, rayon: 16, kills: 1, degats: 1, desc: "Tir simple. Équipe un objet pour changer d'effet.", stats: "30 MUNITIONS · PRÉCIS" },
+            mak10:    { nom: "MAK 10", mun: 40, rayon: 16, kills: 1, degats: 1, auto: true, cadence: 110, desc: "Rafale automatique : maintiens le doigt (ou le clic) pour mitrailler.", stats: "40 MUNITIONS · CADENCE ÉLEVÉE" },
+            carnage:  { nom: "MODE CARNAGE", mun: 8, rayon: 62, kills: 99, degats: 3, desc: "Explosion de zone : touche tous les ennemis autour du point visé.", stats: "8 MUNITIONS · ZONE LARGE · DÉGÂTS x3" },
+            furtif:   { nom: "PROTOCOLE FURTIF", mun: 20, rayon: 16, kills: 1, degats: 2, silencieux: true, desc: "Tir silencieux. Les ennemis avancent 2 fois moins vite et le bouclier se régénère plus vite.", stats: "20 MUNITIONS · DISCRET · DÉGÂTS x2" },
+            missile:  { nom: "LANCE-MISSILES", mun: 6, rayon: 78, kills: 99, degats: 6, projectile: true, rechargeMs: 2500, desc: "Un missile part vers ta cible et explose en grande zone après un court délai.", stats: "6 MISSILES · EXPLOSIF · DÉGÂTS x6" },
+            bouclier: { nom: "BOUCLIER ÉNERGÉTIQUE", mun: 20, rayon: 16, kills: 1, degats: 1, desc: "Un dôme protège le cœur : les impacts sont presque tous absorbés.", stats: "20 MUNITIONS · DÉFENSE x4" },
+            drone:    { nom: "ESCADRON DE DRONES", mun: 20, rayon: 16, kills: 1, degats: 1, desc: "3 drones patrouillent autour du radar et abattent les ennemis tout seuls.", stats: "3 DRONES · TIR AUTOMATIQUE" }
         };
 
         let munitions = 30;
         let rechargeEnCours = false;
         let score = 0;
         let bouclier = 100;
-        let alerteBouclier = false;
         const tirs = [];      // lasers à l'écran
         const fx = [];        // explosions
         const missiles = [];  // missiles en vol
@@ -1152,10 +1476,10 @@
         let batterieNiveau = 100;
         const debutSession = Date.now();
 
-        // Statistiques (le meilleur score est gardé dans le téléphone)
-        let statTirs = 0, statTouches = 0, meilleurScore = 0;
-        try { meilleurScore = parseInt(localStorage.getItem('jarvis_record') || '0', 10) || 0; } catch (e) { }
-        function sauverRecord() { try { localStorage.setItem('jarvis_record', String(meilleurScore)); } catch (e) { } }
+        // Statistiques (les records sont gardés dans le téléphone)
+        let statTirs = 0, statTouches = 0, statKills = 0;
+        let meilleurScore = parseInt(lire('jarvis_record', '0'), 10) || 0;
+        let meilleurVague = parseInt(lire('jarvis_record_vague', '0'), 10) || 0;
 
         function armeId() { return ARMES[armoryEquipeId] ? armoryEquipeId : 'defaut'; }
         function armeActive() { return ARMES[armeId()]; }
@@ -1164,15 +1488,67 @@
             const it = ARMORY_ITEMS.find(x => x.id === armoryEquipeId);
             return it ? it.col : ROUGE_COMBAT;
         }
+        function ajouterScore(n) {
+            score += n;
+            if (score > meilleurScore) { meilleurScore = score; ecrire('jarvis_record', meilleurScore); }
+        }
+
+        // --- Vagues d'ennemis ---
+        const VAGUE = { n: 1, restant: 0, pause: 0, annonce: 0, texte: '', boss: false };
+
+        function demarrerVague(n) {
+            VAGUE.n = n;
+            VAGUE.boss = n % 5 === 0;
+            VAGUE.restant = (VAGUE.boss ? 3 : 4) + n * 2;
+            VAGUE.pause = 0;
+            VAGUE.annonce = 150;
+            VAGUE.texte = VAGUE.boss ? '⚠ VAGUE ' + n + ' : BOSS' : 'VAGUE ' + n;
+            if (n > meilleurVague) { meilleurVague = n; ecrire('jarvis_record_vague', n); }
+            if (VAGUE.boss) {
+                const hp = 10 + n * 2;
+                radar.blips.push({ a: Math.random() * TAU, r: 0.97, hostile: true, boss: true, hp: hp, hpMax: hp, v: 0.0006, vie: 99999 });
+                parlerJarvis("Attention, un boss approche.");
+            }
+            document.getElementById('system-status').innerHTML = '[COMBAT] ' + VAGUE.texte;
+            playBipSonore(VAGUE.boss ? 150 : 520, VAGUE.boss ? 0.6 : 0.2);
+            majPanneauCombat();
+        }
+
+        function majVagues() {
+            if (!combatActif || explosionEnCours) return;
+            if (VAGUE.annonce > 0) VAGUE.annonce--;
+            if (VAGUE.pause > 0) { if (--VAGUE.pause === 0) demarrerVague(VAGUE.n + 1); return; }
+            const hostiles = radar.blips.filter(b => b.hostile).length;
+            if (VAGUE.restant > 0) {
+                const cap = 8 + Math.min(VAGUE.n, 6);
+                if (hostiles < cap && Math.random() < Math.min(0.03, 0.01 + 0.002 * VAGUE.n)) {
+                    const vit = (0.0012 + Math.random() * 0.0012) * Math.min(2.5, 1 + 0.1 * (VAGUE.n - 1));
+                    radar.blips.push({ a: Math.random() * TAU, r: 0.97, hostile: true, hp: 1, hpMax: 1, v: vit, vie: 99999 });
+                    VAGUE.restant--;
+                }
+            } else if (hostiles === 0) {
+                // Vague terminée : récompense, puis pause avant la suivante
+                bouclier = Math.min(100, bouclier + 20);
+                munitions = munMax(); rechargeEnCours = false;
+                ajouterScore(VAGUE.n * 5);
+                VAGUE.texte = 'VAGUE ' + VAGUE.n + ' TERMINÉE';
+                VAGUE.annonce = 150;
+                VAGUE.pause = 180;
+                document.getElementById('system-status').innerHTML = '[COMBAT] VAGUE ' + VAGUE.n + ' TERMINÉE : BONUS BOUCLIER, MUNITIONS ET SCORE';
+                playBipSonore(880, 0.15); setTimeout(() => playBipSonore(1320, 0.2), 160);
+                majPanneauCombat();
+            }
+        }
 
         function majPanneauCombat() {
+            document.getElementById('cp-vague').innerHTML = 'VAGUE: ' + VAGUE.n + (VAGUE.boss ? ' ⚠' : '');
             document.getElementById('cp-arme').innerHTML = 'ARME: ' + armeActive().nom;
             document.getElementById('cp-munitions').innerHTML = 'MUNITIONS: ' + (rechargeEnCours ? 'RECHARGE...' : munitions + '/' + munMax());
-            document.getElementById('cp-score').innerHTML = 'CIBLES NEUTRALISÉES: ' + score;
+            document.getElementById('cp-score').innerHTML = 'SCORE: ' + score;
             document.getElementById('cp-bouclier').innerHTML = 'BOUCLIER: ' + Math.round(bouclier) + '%';
         }
 
-        function basculerCombat(actif) {
+        function basculerCombat(actif, silencieux) {
             if (explosionEnCours || actif === combatActif) return;
             combatActif = actif;
             radar.blips = [];
@@ -1180,19 +1556,32 @@
             arreterTirAuto();
             const panneau = document.getElementById('combat-panel');
             if (actif) {
-                munitions = munMax(); rechargeEnCours = false; score = 0; bouclier = 100; alerteBouclier = false;
+                document.getElementById('fin-combat').style.display = 'none';
+                munitions = munMax(); rechargeEnCours = false; score = 0; bouclier = 100;
                 panneau.style.display = 'flex';
-                document.getElementById('system-status').innerHTML = '[COMBAT] MODE COMBAT ACTIF - TOUCHE OU CLIQUE POUR TIRER, [R] RECHARGER';
                 playBipSonore(400, 0.25);
-                parlerJarvis("Mode combat activé. Radar en alerte maximale.");
+                if (!silencieux) parlerJarvis("Mode combat activé. Radar en alerte maximale.");
+                demarrerVague(1);
             } else {
                 panneau.style.display = 'none';
                 document.getElementById('system-status').innerHTML = '[COMBAT] MODE COMBAT DÉSACTIVÉ';
                 playBipSonore(700, 0.15);
-                parlerJarvis("Mode combat désactivé.");
+                if (!silencieux) parlerJarvis("Mode combat désactivé.");
             }
             appliquerCouleur();
             majPanneauCombat();
+        }
+
+        function finCombat() {
+            const vagueAtteinte = VAGUE.n, scoreFinal = score;
+            basculerCombat(false, true);
+            document.getElementById('fc-vague').textContent = vagueAtteinte;
+            document.getElementById('fc-score').textContent = scoreFinal;
+            document.getElementById('fc-record').textContent = meilleurScore + ' (VAGUE ' + meilleurVague + ')';
+            document.getElementById('fin-combat').style.display = 'flex';
+            document.getElementById('system-status').innerHTML = '[COMBAT] BOUCLIER DÉTRUIT : MISSION TERMINÉE';
+            playBipSonore(90, 1.2);
+            parlerJarvis("Bouclier détruit. Mission terminée. Vague " + vagueAtteinte + ", score " + scoreFinal + ".");
         }
 
         function recharger() {
@@ -1209,27 +1598,73 @@
             }, duree);
         }
 
-        // Enregistre un ennemi détruit
-        function enregistrerKill(x, y) {
-            score++; statTouches++;
-            if (score > meilleurScore) { meilleurScore = score; sauverRecord(); }
-            fx.push({ x: x, y: y, vie: 20, r: 28 });
+        // --- Dégâts, morts et bonus ---
+        const BONUS_INFO = {
+            mun:  { l: 'M', col: '#33ff55', txt: 'MUNITIONS RECHARGÉES' },
+            bouc: { l: 'S', col: '#aa66ff', txt: 'BOUCLIER +35%' },
+            bomb: { l: '!', col: '#ffaa00', txt: 'ONDE DE CHOC' }
+        };
+
+        function laisserBonus(b) {
+            const types = ['mun', 'bouc', 'bomb'];
+            radar.blips.push({ a: b.a, r: Math.max(0.25, Math.min(0.85, b.r)), bonus: types[Math.floor(Math.random() * 3)], hostile: false, vie: 420 });
         }
 
-        // Détruit les ennemis (rouges) dans un rayon autour d'un point
-        function explosionZone(x, y, rayon, maxKills) {
-            let n = 0;
-            for (let i = radar.blips.length - 1; i >= 0 && n < maxKills; i--) {
+        function tuer(b, p) {
+            statKills++;
+            ajouterScore(b.boss ? 10 : 1);
+            fx.push({ x: p.x, y: p.y, vie: 20, r: b.boss ? 60 : 28 });
+            if (b.boss || Math.random() < 0.12) laisserBonus(b);
+        }
+
+        // Retourne true si l'ennemi est détruit
+        function toucher(b, degats) {
+            statTouches++;
+            b.hp -= degats;
+            const p = blipPos(b);
+            if (b.hp > 0) { fx.push({ x: p.x, y: p.y, vie: 8, r: 14 }); playBipSonore(700, 0.04); return false; }
+            const i = radar.blips.indexOf(b);
+            if (i >= 0) radar.blips.splice(i, 1);
+            tuer(b, p);
+            return true;
+        }
+
+        // Touche les ennemis (rouges) dans un rayon autour d'un point
+        function explosionZone(x, y, rayon, maxCibles, degats) {
+            let kills = 0, hits = 0;
+            for (let i = radar.blips.length - 1; i >= 0 && hits < maxCibles; i--) {
                 const b = radar.blips[i];
                 if (!b.hostile) continue;
                 const p = blipPos(b);
-                if (Math.hypot(x - p.x, y - p.y) <= rayon) {
-                    radar.blips.splice(i, 1);
-                    enregistrerKill(p.x, p.y);
-                    n++;
+                if (Math.hypot(x - p.x, y - p.y) <= rayon + (b.boss ? 8 : 0)) {
+                    hits++;
+                    if (toucher(b, degats)) kills++;
                 }
             }
-            return n;
+            return { kills: kills, hits: hits };
+        }
+
+        function collecterBonus(mx, my) {
+            const seuil = LAY.portrait ? 30 : 20;
+            for (let i = radar.blips.length - 1; i >= 0; i--) {
+                const b = radar.blips[i];
+                if (!b.bonus) continue;
+                const p = blipPos(b);
+                if (Math.hypot(mx - p.x, my - p.y) > seuil) continue;
+                radar.blips.splice(i, 1);
+                const info = BONUS_INFO[b.bonus];
+                if (b.bonus === 'mun') { munitions = munMax(); rechargeEnCours = false; }
+                else if (b.bonus === 'bouc') { bouclier = Math.min(100, bouclier + 35); }
+                else {
+                    radar.blips.filter(h => h.hostile).forEach(h => { toucher(h, 6); });
+                    fx.push({ x: radarGeom().x, y: radarGeom().y, vie: 20, r: radarGeom().R * 1.4 });
+                }
+                document.getElementById('system-status').innerHTML = '[BONUS] ' + info.txt;
+                playBipSonore(1200, 0.1); setTimeout(() => playBipSonore(1600, 0.12), 110);
+                majPanneauCombat();
+                return true;
+            }
+            return false;
         }
 
         function lancerMissile(mx, my, rayon) {
@@ -1239,6 +1674,7 @@
         }
 
         function tirer(mx, my) {
+            if (collecterBonus(mx, my)) return;     // toucher un bonus le ramasse (sans tirer)
             if (rechargeEnCours) return;
             const arme = armeActive();
             if (munitions <= 0) { recharger(); return; }
@@ -1252,11 +1688,13 @@
             } else {
                 if (arme.silencieux) playBipSonore(500, 0.04); else playTir();
                 tirs.push({ x0: width / 2, y0: height - LAY.hubBottom, x1: mx, y1: my, vie: arme.silencieux ? 5 : 8, col: armeCouleur() });
-                const n = explosionZone(mx, my, rayon, arme.kills);
+                const r = explosionZone(mx, my, rayon, arme.kills, arme.degats || 1);
                 if (rayon > 30) fx.push({ x: mx, y: my, vie: 20, r: rayon });
-                if (n > 0) {
+                if (r.kills > 0) {
                     playBipSonore(900, 0.12);
-                    document.getElementById('system-status').innerHTML = '[COMBAT] ' + n + (n > 1 ? ' CIBLES NEUTRALISÉES' : ' CIBLE NEUTRALISÉE');
+                    document.getElementById('system-status').innerHTML = '[COMBAT] ' + r.kills + (r.kills > 1 ? ' CIBLES NEUTRALISÉES' : ' CIBLE NEUTRALISÉE');
+                } else if (r.hits > 0) {
+                    document.getElementById('system-status').innerHTML = '[COMBAT] IMPACT';
                 }
             }
             if (munitions === 0) recharger();
@@ -1277,9 +1715,10 @@
             if (tirAutoTimer) { clearInterval(tirAutoTimer); tirAutoTimer = null; }
         }
 
-        function subirDegats() {
+        function subirDegats(dmg) {
+            dmg = dmg || 12;
             const dome = armoryEquipeId === 'bouclier';
-            bouclier = Math.max(0, bouclier - (dome ? 3 : 12));
+            bouclier = Math.max(0, bouclier - (dome ? dmg * 0.25 : dmg));
             if (dome) {
                 domeFlash = 14;
                 playBipSonore(650, 0.2);
@@ -1291,11 +1730,8 @@
                 hudEl.classList.add('secousse-critique');
                 setTimeout(() => { if (!explosionEnCours) hudEl.classList.remove('secousse-critique'); }, 350);
             }
-            if (bouclier === 0 && !alerteBouclier) {
-                alerteBouclier = true;
-                parlerJarvis("Bouclier hors service, Monsieur.");
-            }
             majPanneauCombat();
+            if (bouclier <= 0 && combatActif) finCombat();
         }
 
         // --- Drones : 3 drones qui tournent autour du radar et tirent seuls ---
@@ -1317,11 +1753,11 @@
             const p = blipPos(cible);
             const d = dronePos(droneIdx); droneIdx = (droneIdx + 1) % 3;
             tirs.push({ x0: d.x, y0: d.y, x1: p.x, y1: p.y, vie: 10, col: '#ffee33' });
-            radar.blips.splice(radar.blips.indexOf(cible), 1);
-            enregistrerKill(p.x, p.y);
+            toucher(cible, 1);
             statTirs++;
             playBipSonore(1400, 0.06);
-            document.getElementById('system-status').innerHTML = '[DRONES] CIBLE ABATTUE';
+            document.getElementById('system-status').innerHTML = '[DRONES] TIR SUR CIBLE';
+            majPanneauCombat();
         }
 
         function drawDrones() {
@@ -1357,6 +1793,20 @@
             if (domeFlash > 0) domeFlash--;
         }
 
+        // --- Bonus sur le radar ---
+        function dessinerBonus(b) {
+            const p = blipPos(b);
+            const info = BONUS_INFO[b.bonus];
+            if (b.vie < 90 && Math.floor(b.vie / 6) % 2 === 0) return;   // clignote avant de disparaître
+            ctx.save();
+            ctx.globalAlpha = 1;
+            ctx.strokeStyle = info.col; ctx.fillStyle = info.col; ctx.shadowColor = info.col; ctx.shadowBlur = 8; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, TAU); ctx.stroke();
+            ctx.font = "bold 9px 'Courier New', monospace"; ctx.textAlign = "center";
+            ctx.fillText(info.l, p.x, p.y + 3);
+            ctx.restore();
+        }
+
         function drawCombatFX() {
             ctx.save();
             // lasers
@@ -1382,23 +1832,34 @@
                 ctx.fillStyle = '#ffffff';
                 ctx.beginPath(); ctx.arc(x, y, 3, 0, TAU); ctx.fill();
                 if (p >= 1) {
-                    const n = explosionZone(m.tx, m.ty, m.rayon, 99);
+                    missiles.splice(i, 1);
+                    const r = explosionZone(m.tx, m.ty, m.rayon, 99, armeActive().degats || 6);
                     fx.push({ x: m.tx, y: m.ty, vie: 20, r: m.rayon });
                     playBipSonore(110, 0.4);
-                    document.getElementById('system-status').innerHTML = '[COMBAT] EXPLOSION : ' + n + (n > 1 ? ' CIBLES DÉTRUITES' : ' CIBLE DÉTRUITE');
-                    missiles.splice(i, 1);
+                    document.getElementById('system-status').innerHTML = '[COMBAT] EXPLOSION : ' + r.kills + (r.kills > 1 ? ' CIBLES DÉTRUITES' : ' CIBLE DÉTRUITE');
                     majPanneauCombat();
                 }
             }
             // explosions
             for (let i = fx.length - 1; i >= 0; i--) {
                 const f = fx[i];
-                ctx.globalAlpha = Math.max(0, f.vie / 20);
+                const dur = f.r === 14 ? 8 : 20;
+                ctx.globalAlpha = Math.max(0, f.vie / dur);
                 ctx.strokeStyle = '#ffffff'; ctx.shadowBlur = 12; ctx.shadowColor = ROUGE_COMBAT; ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.arc(f.x, f.y, (20 - f.vie) / 20 * (f.r || 28) + 4, 0, TAU); ctx.stroke();
+                ctx.beginPath(); ctx.arc(f.x, f.y, (dur - f.vie) / dur * (f.r || 28) + 4, 0, TAU); ctx.stroke();
                 if (--f.vie <= 0) fx.splice(i, 1);
             }
             ctx.restore();
+
+            // annonce de vague
+            if (combatActif && VAGUE.annonce > 0) {
+                ctx.save();
+                ctx.globalAlpha = Math.min(1, VAGUE.annonce / 40);
+                ctx.textAlign = "center"; ctx.font = "bold 22px 'Courier New', monospace";
+                ctx.fillStyle = ROUGE_COMBAT; ctx.shadowBlur = 14; ctx.shadowColor = ROUGE_COMBAT;
+                ctx.fillText(VAGUE.texte, LAY.coeurX, LAY.portrait ? LAY.coeurY + LAY.coeurSize * 1.7 : LAY.coeurY - LAY.coeurSize * 1.55);
+                ctx.restore();
+            }
 
             // réticule de visée
             if (combatActif && armoryT < 0.2 && !explosionEnCours) {
@@ -1422,17 +1883,280 @@
         }
 
         // ============================================================
+        //  OUTILS UTILES : minuteur, météo, raccourcis, calculs...
+        // ============================================================
+        const LIENS = [
+            { mots: ['youtube'], nom: 'YOUTUBE', url: 'https://www.youtube.com' },
+            { mots: ['discord'], nom: 'DISCORD', url: 'https://discord.com/app' },
+            { mots: ['whatsapp'], nom: 'WHATSAPP', url: 'https://web.whatsapp.com' },
+            { mots: ['spotify'], nom: 'SPOTIFY', url: 'https://open.spotify.com' },
+            { mots: ['vinted'], nom: 'VINTED', url: 'https://www.vinted.fr' },
+            { mots: ['maps', 'google maps'], nom: 'MAPS', url: 'https://maps.google.com' },
+            { mots: ['gmail'], nom: 'GMAIL', url: 'https://mail.google.com' },
+            { mots: ['instagram'], nom: 'INSTAGRAM', url: 'https://www.instagram.com' },
+            { mots: ['tiktok'], nom: 'TIKTOK', url: 'https://www.tiktok.com' },
+            { mots: ['twitch'], nom: 'TWITCH', url: 'https://www.twitch.tv' },
+            { mots: ['netflix'], nom: 'NETFLIX', url: 'https://www.netflix.com' },
+            { mots: ['google'], nom: 'GOOGLE', url: 'https://www.google.com' }
+        ];
+
+        let toastTimer = null;
+        function afficherToast(nom, url) {
+            const a = document.getElementById('toast-lien');
+            a.href = url; a.textContent = 'OUVRIR ' + nom + ' ▸'; a.style.display = 'block';
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { a.style.display = 'none'; }, 10000);
+        }
+        function ouvrirLien(nom, url) {
+            document.getElementById('system-status').innerHTML = '[OUTILS] OUVERTURE : ' + nom;
+            parlerJarvis("J'ouvre " + nom.toLowerCase() + ".");
+            let w = null;
+            try { w = window.open(url, '_blank'); } catch (e) { }
+            if (!w) afficherToast(nom, url);      // si le navigateur bloque l'ouverture : bouton à toucher
+        }
+
+        const MOTS_CHIFFRES = { un: 1, une: 1, deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6, sept: 7, huit: 8, neuf: 9, dix: 10, quinze: 15, vingt: 20, trente: 30, quarante: 40, cinquante: 50, soixante: 60 };
+        function enChiffres(p) {
+            return p.replace(/demi[- ]?heure/g, '30 minutes')
+                .replace(/\b(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante)\b/g, m => MOTS_CHIFFRES[m])
+                .replace(/(\d+)\s*heures?\s*et\s*demie?\b/g, '$1 heures 30 minutes')
+                .replace(/(\d+)\s*heures?\s*et\s*quart\b/g, '$1 heures 15 minutes');
+        }
+
+        // --- Minuteur ---
+        let minuteur = null;
+        function dureeEnSecondes(p) {
+            let total = 0, m;
+            const re = /(\d+(?:[.,]\d+)?)\s*(heures?|h|minutes?|mins?|secondes?|secs?)\b/g;
+            while ((m = re.exec(p))) {
+                const n = parseFloat(m[1].replace(',', '.')), u = m[2][0];
+                total += u === 'h' ? n * 3600 : (u === 'm' ? n * 60 : n);
+            }
+            if (!total) { const n = p.match(/(\d+)/); if (n) total = parseInt(n[1], 10) * 60; }
+            return Math.round(total);
+        }
+        function formatMMSS(ms) {
+            const t = Math.max(0, Math.ceil(ms / 1000));
+            const h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = t % 60;
+            const d = (n) => String(n).padStart(2, '0');
+            return (h ? d(h) + ':' : '') + d(m) + ':' + d(s);
+        }
+        function libelleDuree(sec) {
+            const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
+            const parts = [];
+            if (h) parts.push(h + (h > 1 ? ' heures' : ' heure'));
+            if (m) parts.push(m + (m > 1 ? ' minutes' : ' minute'));
+            if (s) parts.push(s + (s > 1 ? ' secondes' : ' seconde'));
+            return parts.join(' ');
+        }
+        function lancerMinuteur(sec) {
+            if (sec <= 0) return;
+            minuteur = { fin: Date.now() + sec * 1000, total: sec };
+            document.getElementById('system-status').innerHTML = '[MINUTEUR] ' + libelleDuree(sec).toUpperCase();
+            parlerJarvis("Minuteur lancé pour " + libelleDuree(sec) + ".");
+            playBipSonore(1000, 0.1);
+        }
+        function arreterMinuteur(parler) {
+            if (!minuteur) { if (parler) parlerJarvis("Aucun minuteur en cours."); return; }
+            minuteur = null;
+            document.getElementById('system-status').innerHTML = '[MINUTEUR] ANNULÉ';
+            if (parler) parlerJarvis("Minuteur annulé.");
+        }
+        // bip qui ignore le mode silencieux (une alarme doit se faire entendre)
+        function bipAlarme(freq) {
+            if (!audioCtx) return;
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = 'square'; o.frequency.value = freq;
+            g.gain.setValueAtTime(0.1, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
+            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.25);
+        }
+        function alarmeMinuteur() {
+            document.getElementById('system-status').innerHTML = '[MINUTEUR] TERMINÉ !';
+            for (let i = 0; i < 6; i++) setTimeout(() => bipAlarme(i % 2 ? 880 : 1175), i * 300);
+            const saved = voixActive; voixActive = true;
+            parlerJarvis(appelAffiche() + ", votre minuteur est terminé.");
+            voixActive = saved;
+        }
+        setInterval(() => {
+            const chip = document.getElementById('live-timer');
+            const aff = document.getElementById('tm-affiche');
+            if (!minuteur) { chip.style.display = 'none'; if (aff) aff.textContent = 'AUCUN MINUTEUR'; return; }
+            const reste = minuteur.fin - Date.now();
+            if (reste <= 0) { minuteur = null; alarmeMinuteur(); return; }
+            chip.style.display = 'block'; chip.textContent = 'MINUTEUR : ' + formatMMSS(reste);
+            if (aff) aff.textContent = formatMMSS(reste);
+        }, 250);
+
+        // --- Météo (service gratuit Open-Meteo, aucune clé nécessaire) ---
+        function decrireMeteo(c) {
+            if (c === 0) return 'ciel dégagé';
+            if (c <= 2) return 'partiellement nuageux';
+            if (c === 3) return 'ciel couvert';
+            if (c === 45 || c === 48) return 'brouillard';
+            if (c >= 51 && c <= 57) return 'bruine';
+            if (c >= 61 && c <= 67) return 'pluie';
+            if (c >= 71 && c <= 77) return 'neige';
+            if (c >= 80 && c <= 82) return 'averses';
+            if (c === 85 || c === 86) return 'averses de neige';
+            if (c >= 95) return 'orage';
+            return 'temps variable';
+        }
+        async function meteo(ville) {
+            const res = document.getElementById('meteo-res');
+            res.textContent = 'RECHERCHE EN COURS...';
+            document.getElementById('system-status').innerHTML = '[MÉTÉO] RECHERCHE...';
+            try {
+                let lat, lon, nom;
+                if (!ville) ville = lire('jarvis_ville', '');
+                if (ville) {
+                    const g = await (await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(ville) + '&count=1&language=fr')).json();
+                    if (!g.results || !g.results.length) throw new Error('ville');
+                    lat = g.results[0].latitude; lon = g.results[0].longitude; nom = g.results[0].name;
+                    ecrire('jarvis_ville', ville);
+                } else {
+                    const pos = await new Promise((ok, ko) => navigator.geolocation.getCurrentPosition(ok, ko, { timeout: 8000 }));
+                    lat = pos.coords.latitude; lon = pos.coords.longitude; nom = 'votre position';
+                }
+                const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+                    '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1';
+                const m = await (await fetch(url)).json();
+                const c = m.current, d = m.daily;
+                const temp = Math.round(c.temperature_2m), ress = Math.round(c.apparent_temperature);
+                const tmax = Math.round(d.temperature_2m_max[0]), tmin = Math.round(d.temperature_2m_min[0]);
+                const pluie = d.precipitation_probability_max[0], vent = Math.round(c.wind_speed_10m);
+                const desc = decrireMeteo(c.weather_code);
+                res.innerHTML = esc(nom.toUpperCase()) + ' : ' + temp + '°C (RESSENTI ' + ress + '°C), ' + esc(desc.toUpperCase()) +
+                    '<br>MIN ' + tmin + '°C · MAX ' + tmax + '°C · PLUIE ' + pluie + '% · VENT ' + vent + ' KM/H';
+                document.getElementById('system-status').innerHTML = '[MÉTÉO] ' + nom.toUpperCase() + ' : ' + temp + '°C, ' + desc.toUpperCase();
+                parlerJarvis("À " + nom + ", " + desc + ", " + temp + " degrés, ressenti " + ress + ". Minimum " + tmin + ", maximum " + tmax + ". Risque de pluie " + pluie + " pour cent.");
+            } catch (e) {
+                res.textContent = 'IMPOSSIBLE DE RÉCUPÉRER LA MÉTÉO. ÉCRIS UNE VILLE, OU AUTORISE LA POSITION, ET VÉRIFIE LA CONNEXION.';
+                document.getElementById('system-status').innerHTML = '[MÉTÉO] ÉCHEC';
+                parlerJarvis("Je n'ai pas pu récupérer la météo. Précisez une ville.");
+            }
+        }
+
+        // --- Journal des commandes vocales ---
+        const journalVocal = [];
+        function noterCommande(p) {
+            const h = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            journalVocal.unshift(h + '  ' + p);
+            if (journalVocal.length > 6) journalVocal.pop();
+        }
+
+        // --- Commandes vocales utiles (renvoie true si la phrase a été traitée) ---
+        function traiterCommandeUtile(brut) {
+            const p = enChiffres(brut);
+            const verbeStop = /coupe|arrête|arrete|stop|éteins|eteins|désactive|desactive|enlève|enleve|annule/;
+            const verbeStart = /remets|remet|active|réactive|reactive|mets|met |allume|lance/;
+
+            if (p.includes('minuteur') || p.includes('compte à rebours')) {
+                if (verbeStop.test(p) || p.includes('supprime')) { arreterMinuteur(true); return true; }
+                if (p.includes('combien') || p.includes('reste')) {
+                    parlerJarvis(minuteur ? "Il reste " + libelleDuree(Math.ceil((minuteur.fin - Date.now()) / 1000)) + "." : "Aucun minuteur en cours.");
+                    return true;
+                }
+                const sec = dureeEnSecondes(p);
+                if (sec > 0) lancerMinuteur(sec); else parlerJarvis("Précisez la durée, par exemple : minuteur 5 minutes.");
+                return true;
+            }
+            if (p.includes('météo') || p.includes('meteo') || p.includes('quel temps')) {
+                const m = p.match(/(?:à|a|de|pour|sur|dans)\s+([a-zà-ÿ' -]+)$/);
+                let ville = m ? m[1].trim() : null;
+                if (ville && /^(demain|aujourd'hui|aujourd hui|ici|maintenant|ce soir|ce matin|la|le)$/.test(ville)) ville = null;
+                meteo(ville);
+                return true;
+            }
+            const mc = p.match(/(?:cherche|recherche|recherches)\s+(.+)/);
+            if (mc) {
+                let q = mc[1].trim(), url, nom = 'GOOGLE';
+                if (/sur youtube/.test(q)) { q = q.replace(/\s*sur youtube.*/, ''); url = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q); nom = 'YOUTUBE'; }
+                else url = 'https://www.google.com/search?q=' + encodeURIComponent(q.replace(/\s*sur google.*/, ''));
+                ouvrirLien(nom + ' : ' + q.toUpperCase(), url);
+                return true;
+            }
+            if (/\b(ouvre|ouvrir|lance|lancer|va sur|aller sur)\b/.test(p)) {
+                const l = LIENS.find(x => x.mots.some(w => p.includes(w)));
+                if (l) { ouvrirLien(l.nom, l.url); return true; }
+            }
+            if (/musique|ambiance/.test(p)) {
+                basculerAmbiance(!verbeStop.test(p));
+                parlerJarvis(ambiancePref ? "Ambiance activée." : "Ambiance coupée.");
+                return true;
+            }
+            if (/\bsons?\b/.test(p) && (verbeStop.test(p) || verbeStart.test(p))) {
+                const couper = verbeStop.test(p);
+                basculerSon(!couper);
+                if (!couper) parlerJarvis("Son rétabli.");
+                return true;
+            }
+            if (/\bvoix\b/.test(p) && (verbeStop.test(p) || verbeStart.test(p) || p.includes('tais'))) {
+                const couper = verbeStop.test(p) || p.includes('tais');
+                if (couper) { basculerVoix(false); document.getElementById('system-status').innerHTML = '[VOIX] COUPÉE'; }
+                else { basculerVoix(true); parlerJarvis("Voix rétablie."); }
+                return true;
+            }
+            const ma = p.match(/appelle[- ]moi\s+(.+)/);
+            if (ma) {
+                prenom = ma[1].trim().slice(0, 20); ecrire('jarvis_prenom', prenom);
+                majReglages();
+                parlerJarvis("Très bien, je vous appellerai " + prenom + ".");
+                return true;
+            }
+            if (/thème|theme|couleur/.test(p)) {
+                let id = null;
+                if (/\b(or|doré|dore|jaune)\b/.test(p)) id = 'or';
+                else if (/vert|matrix/.test(p)) id = 'vert';
+                else if (/violet/.test(p)) id = 'violet';
+                else if (/blanc|glace/.test(p)) id = 'glace';
+                else if (/bleu|stark|cyan|normal/.test(p)) id = 'stark';
+                if (id) { appliquerTheme(id); parlerJarvis("Thème modifié."); return true; }
+            }
+            if (/calcul|combien (font|fait)/.test(p)) {
+                const m = p.match(/(\d+(?:[.,]\d+)?)\s*(plus|moins|fois|x|multiplié par|divisé par|sur)\s*(\d+(?:[.,]\d+)?)/);
+                if (m) {
+                    const a = parseFloat(m[1].replace(',', '.')), b = parseFloat(m[3].replace(',', '.'));
+                    let r;
+                    if (m[2] === 'plus') r = a + b; else if (m[2] === 'moins') r = a - b;
+                    else if (m[2] === 'fois' || m[2] === 'x' || m[2] === 'multiplié par') r = a * b;
+                    else r = b === 0 ? null : a / b;
+                    if (r === null) parlerJarvis("Je ne peux pas diviser par zéro, même pour vous.");
+                    else { r = Math.round(r * 1000) / 1000; document.getElementById('system-status').innerHTML = '[CALCUL] ' + a + ' ' + m[2].toUpperCase() + ' ' + b + ' = ' + r; parlerJarvis("Le résultat est " + String(r).replace('.', ',') + "."); }
+                    return true;
+                }
+            }
+            if (p.includes('pile ou face')) {
+                const r = Math.random() < 0.5 ? 'Pile' : 'Face';
+                document.getElementById('system-status').innerHTML = '[HASARD] ' + r.toUpperCase();
+                parlerJarvis(r + ".");
+                return true;
+            }
+            if (/\bdé\b|\bdes\b.*lance|lance.*\bdé/.test(p) && /lance|lancer|jette/.test(p)) {
+                const r = 1 + Math.floor(Math.random() * 6);
+                document.getElementById('system-status').innerHTML = '[HASARD] DÉ : ' + r;
+                parlerJarvis("Le dé donne " + r + ".");
+                return true;
+            }
+            if (p.includes('batterie')) {
+                parlerJarvis("Le réacteur arc est à " + batterieNiveau + " pour cent.");
+                return true;
+            }
+            return false;
+        }
+
+        // ============================================================
         //  ÉCRANS : on change d'écran en glissant le doigt
-        //  0 = principal | 1 = armurerie | 2 = systèmes
+        //  0 = principal | 1 = armurerie | 2 = systèmes | 3 = outils
         // ============================================================
         let pageActuelle = 0;
         let tChangementPage = 0;
-        const NOMS_PAGES = ['PRINCIPAL', 'ARMURERIE', 'SYSTÈMES'];
+        const NOMS_PAGES = ['PRINCIPAL', 'ARMURERIE', 'SYSTÈMES', 'OUTILS'];
 
-        function creerEcran(id, titre, contenu) {
+        function creerEcran(id, titre, contenu, z) {
             const el = document.createElement('div');
             el.className = 'ecran-extra';
             el.id = id;
+            el.style.zIndex = String(z);
             el.innerHTML = `<div class="ee-cadre"><div class="ee-titre">${titre}</div>${contenu}</div>`;
             document.body.appendChild(el);
             return el;
@@ -1441,7 +2165,7 @@
         const ecranArmurerie = creerEcran('ecran-armurerie', '// ARMURERIE',
             `<div class="ee-sous">TOUCHE UN ÉQUIPEMENT POUR L'ÉQUIPER</div>
              <div id="liste-armes"></div>
-             <div class="ee-pied">◂ GLISSE VERS LA DROITE : PRINCIPAL &nbsp;·&nbsp; VERS LA GAUCHE : SYSTÈMES ▸</div>`);
+             <div class="ee-pied">◂ GLISSE VERS LA DROITE : PRINCIPAL &nbsp;·&nbsp; VERS LA GAUCHE : SYSTÈMES ▸</div>`, 41);
 
         const ecranSystemes = creerEcran('ecran-systemes', '// SYSTÈMES',
             `<div class="ee-sous">DIAGNOSTIC EN DIRECT</div>
@@ -1453,26 +2177,62 @@
              <div class="sy-ligne"><span>EN SERVICE DEPUIS</span><b id="sy-temps">--</b></div>
              <div class="ee-sous">STATISTIQUES DE COMBAT</div>
              <div class="sy-ligne"><span>TIRS</span><b id="sy-tirs">0</b></div>
-             <div class="sy-ligne"><span>CIBLES NEUTRALISÉES</span><b id="sy-touches">0</b></div>
+             <div class="sy-ligne"><span>ENNEMIS DÉTRUITS</span><b id="sy-touches">0</b></div>
              <div class="sy-ligne"><span>PRÉCISION</span><b id="sy-prec">--</b></div>
              <div class="sy-ligne"><span>MEILLEUR SCORE</span><b id="sy-record">0</b></div>
+             <div class="sy-ligne"><span>MEILLEURE VAGUE</span><b id="sy-vague">0</b></div>
+             <div class="ee-sous">RÉGLAGES</div>
+             <div class="ligne-outil">
+                <button class="btn-reg" id="rg-son">SON : --</button>
+                <button class="btn-reg" id="rg-voix">VOIX : --</button>
+                <button class="btn-reg" id="rg-amb">AMBIANCE : --</button>
+             </div>
+             <div class="sy-ligne"><span>THÈME</span></div>
+             <div class="ligne-outil" id="rg-themes"></div>
+             <div class="sy-ligne"><span>PRÉNOM</span></div>
+             <div class="ligne-outil"><input id="rg-prenom" placeholder="TON PRÉNOM" maxlength="20"><button class="btn-reg" id="rg-prenom-ok">OK</button></div>
              <div class="ee-sous">APPAREIL</div>
              <div class="sy-ligne"><span>APPLICATION INSTALLÉE</span><b id="sy-install">--</b></div>
-             <div class="sy-ligne"><span>COMMANDE VOCALE</span><b id="sy-voix">--</b></div>
+             <div class="sy-ligne"><span>COMMANDE VOCALE</span><b id="sy-voixdispo">--</b></div>
              <div class="sy-ligne"><span>ÉCRAN</span><b id="sy-ecran">--</b></div>
-             <div class="ee-sous">COMMANDES VOCALES</div>
-             <div class="sy-aide">
-                 « Jarvis, quelle heure » · « la date » · « statut »<br>
-                 « Jarvis, mode combat » · « fin du combat »<br>
-                 « Jarvis, missile » · « bouclier » · « drone » · « carnage » · « furtif »<br>
-                 « Jarvis, écran armurerie » · « écran systèmes » · « écran principal »<br>
-                 « Jarvis, code rouge » · « annule l'alerte »<br>
-                 « Jarvis, auto destruction »
+             <div class="ee-sous">DERNIÈRES COMMANDES VOCALES</div>
+             <div class="sy-aide" id="sy-journal">—</div>
+             <div class="ee-pied">◂ GLISSE VERS LA DROITE : ARMURERIE &nbsp;·&nbsp; VERS LA GAUCHE : OUTILS ▸</div>`, 42);
+
+        const ecranOutils = creerEcran('ecran-outils', '// OUTILS',
+            `<div class="ee-sous">MÉTÉO</div>
+             <div class="ligne-outil"><input id="mt-ville" placeholder="VILLE (OU LAISSE VIDE)" maxlength="40"><button class="btn-reg" id="mt-go">OK</button></div>
+             <div class="sy-aide" id="meteo-res">—</div>
+             <div class="ee-sous">MINUTEUR</div>
+             <div class="sy-ligne"><span>RESTANT</span><b id="tm-affiche">AUCUN MINUTEUR</b></div>
+             <div class="ligne-outil">
+                <button class="btn-reg" data-tm="60">1 MIN</button>
+                <button class="btn-reg" data-tm="300">5 MIN</button>
+                <button class="btn-reg" data-tm="600">10 MIN</button>
+                <button class="btn-reg" data-tm="1800">30 MIN</button>
+                <button class="btn-reg" id="tm-stop">STOP</button>
              </div>
-             <div class="ee-pied">◂ GLISSE VERS LA DROITE : ARMURERIE</div>`);
+             <div class="ee-sous">RACCOURCIS</div>
+             <div class="grille-liens" id="grille-liens"></div>
+             <div class="ee-sous">À LA VOIX</div>
+             <div class="sy-aide">
+                « Jarvis, ouvre YouTube » · « cherche recette de crêpes »<br>
+                « Jarvis, météo » · « météo à Lyon »<br>
+                « Jarvis, minuteur 5 minutes » · « stop minuteur »<br>
+                « Jarvis, calcule 12 fois 5 » · « pile ou face » · « lance un dé »<br>
+                « Jarvis, coupe le son » · « remets le son » · « coupe la voix »<br>
+                « Jarvis, musique » · « coupe la musique » · « thème or »<br>
+                « Jarvis, appelle-moi Léa »<br>
+                « Jarvis, mode combat » · « fin du combat »<br>
+                « Jarvis, missile / bouclier / drone / carnage / furtif »<br>
+                « Jarvis, écran armurerie / systèmes / outils / principal »<br>
+                « Jarvis, code rouge » · « annule l'alerte » · « auto destruction »
+             </div>
+             <div class="ee-pied">◂ GLISSE VERS LA DROITE : SYSTÈMES</div>`, 43);
 
-        const ecrans = [null, ecranArmurerie, ecranSystemes];
+        const ecrans = [null, ecranArmurerie, ecranSystemes, ecranOutils];
 
+        // --- Armurerie ---
         function rafraichirArmurerie() {
             const liste = document.getElementById('liste-armes');
             liste.innerHTML = ARMORY_ITEMS.map(it => {
@@ -1488,32 +2248,75 @@
                 </div>`;
             }).join('');
         }
-
         ecranArmurerie.addEventListener('click', (e) => {
             const carte = e.target.closest('.carte-arme');
             if (carte && !explosionEnCours) { equiperParId(carte.dataset.id); rafraichirArmurerie(); }
+        });
+
+        // --- Systèmes ---
+        function majReglages() {
+            const $ = (id) => document.getElementById(id);
+            if (!$('rg-son')) return;
+            $('rg-son').textContent = 'SON : ' + (sonActif ? 'OUI' : 'NON');
+            $('rg-voix').textContent = 'VOIX : ' + (voixActive ? 'OUI' : 'NON');
+            $('rg-amb').textContent = 'AMBIANCE : ' + (ambiancePref ? 'OUI' : 'NON');
+            document.querySelectorAll('.btn-theme').forEach(b => b.classList.toggle('actif', b.dataset.id === themeId));
+            if (document.activeElement !== $('rg-prenom')) $('rg-prenom').value = prenom;
+        }
+        document.getElementById('rg-themes').innerHTML = THEMES.map(t =>
+            `<button class="btn-reg btn-theme" data-id="${t.id}" style="--c:${t.col}">${t.nom}</button>`).join('');
+        ecranSystemes.addEventListener('click', (e) => {
+            const b = e.target.closest('button');
+            if (!b) return;
+            if (b.id === 'rg-son') basculerSon();
+            else if (b.id === 'rg-voix') basculerVoix();
+            else if (b.id === 'rg-amb') basculerAmbiance();
+            else if (b.classList.contains('btn-theme')) appliquerTheme(b.dataset.id);
+            else if (b.id === 'rg-prenom-ok') {
+                prenom = document.getElementById('rg-prenom').value.trim().slice(0, 20);
+                ecrire('jarvis_prenom', prenom);
+                document.getElementById('system-status').innerHTML = '[RÉGLAGES] PRÉNOM : ' + nomAffiche();
+                majReglages();
+            }
         });
 
         function rafraichirSystemes() {
             const $ = (id) => document.getElementById(id);
             $('sy-batt').textContent = batterieNiveau + '%'; $('sy-batt-b').style.width = batterieNiveau + '%';
             $('sy-bouc').textContent = Math.round(bouclier) + '%'; $('sy-bouc-b').style.width = bouclier + '%';
-            $('sy-mode').textContent = combatActif ? 'COMBAT' : 'VEILLE ACTIVE';
+            $('sy-mode').textContent = combatActif ? 'COMBAT (VAGUE ' + VAGUE.n + ')' : 'VEILLE ACTIVE';
             $('sy-arme').textContent = armeActive().nom;
             $('sy-mun').textContent = combatActif ? (rechargeEnCours ? 'RECHARGE...' : munitions + '/' + munMax()) : '—';
             const t = Math.floor((Date.now() - debutSession) / 1000);
             const deux = (n) => String(n).padStart(2, '0');
             $('sy-temps').textContent = deux(Math.floor(t / 3600)) + ':' + deux(Math.floor(t % 3600 / 60)) + ':' + deux(t % 60);
             $('sy-tirs').textContent = statTirs;
-            $('sy-touches').textContent = statTouches;
+            $('sy-touches').textContent = statKills;
             $('sy-prec').textContent = statTirs ? Math.min(100, Math.round(statTouches / statTirs * 100)) + '%' : '—';
             $('sy-record').textContent = meilleurScore;
+            $('sy-vague').textContent = meilleurVague;
             const installee = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
             $('sy-install').textContent = installee ? 'OUI' : 'NON (NAVIGATEUR)';
-            $('sy-voix').textContent = SpeechRecognition ? 'DISPONIBLE' : 'NON SUPPORTÉE';
+            $('sy-voixdispo').textContent = SpeechRecognition ? 'DISPONIBLE' : 'NON SUPPORTÉE';
             $('sy-ecran').textContent = width + ' × ' + height;
+            $('sy-journal').innerHTML = journalVocal.length ? journalVocal.map(esc).join('<br>') : '—';
+            majReglages();
         }
         setInterval(() => { if (pageActuelle === 2) rafraichirSystemes(); }, 500);
+
+        // --- Outils ---
+        document.getElementById('grille-liens').innerHTML = LIENS.map(l =>
+            `<a class="lien-app" href="${l.url}" target="_blank" rel="noopener">▶ ${l.nom}</a>`).join('');
+        ecranOutils.addEventListener('click', (e) => {
+            const b = e.target.closest('button');
+            if (!b) return;
+            if (b.id === 'mt-go') meteo(document.getElementById('mt-ville').value.trim() || null);
+            else if (b.id === 'tm-stop') arreterMinuteur(false);
+            else if (b.dataset.tm) lancerMinuteur(parseInt(b.dataset.tm, 10));
+        });
+        document.getElementById('mt-ville').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') meteo(e.target.value.trim() || null);
+        });
 
         // Petits points en haut : indiquent l'écran actuel (et sont cliquables)
         const dotsEl = document.getElementById('page-dots');
@@ -1530,7 +2333,7 @@
         majDots();
 
         function allerPage(n) {
-            n = Math.max(0, Math.min(2, n));
+            n = Math.max(0, Math.min(ecrans.length - 1, n));
             if (n === pageActuelle || explosionEnCours || !systemeInitialise) return;
             pageActuelle = n;
             tChangementPage = performance.now();
@@ -1543,6 +2346,67 @@
             if (n === 2) rafraichirSystemes();
             document.getElementById('system-status').innerHTML = '[ÉCRAN] ' + NOMS_PAGES[n];
         }
+
+        // Boutons du combat (panneau STOP et écran de fin)
+        document.getElementById('cp-stop').addEventListener('click', () => basculerCombat(false));
+        document.getElementById('fc-rejouer').addEventListener('click', () => basculerCombat(true));
+        document.getElementById('fc-quitter').addEventListener('click', () => { document.getElementById('fin-combat').style.display = 'none'; });
+
+        // ============================================================
+        //  SÉQUENCE DE DÉMARRAGE
+        // ============================================================
+        function demarrerSysteme() {
+            document.getElementById('hud').style.display = 'block';
+            armoryLayer.style.display = 'block';
+            document.getElementById('page-dots').style.display = 'flex';
+            systemeInitialise = true;
+            mettreAJourHorloge();
+            connecterBatterie();
+            parlerJarvis("Analyse biométrique de sécurité en cours.");
+            lancerFauxScanBiometrique();
+            activerMicroJarvis();
+        }
+
+        function lancerBoot() {
+            const el = document.getElementById('boot-screen');
+            const zone = document.getElementById('boot-lignes');
+            const barre = document.getElementById('boot-barre');
+            el.style.display = 'block'; zone.innerHTML = ''; barre.style.width = '0%';
+            const lignes = [
+                'ZEYROX INDUSTRIES // BIOS v5.0',
+                '> CHARGEMENT DU NOYAU J.A.R.V.I.S. ........ OK',
+                '> RÉACTEUR ARC ............................ OK',
+                '> MATRICE HOLOGRAPHIQUE .................... OK',
+                '> RADAR SECTEUR 7 ......................... OK',
+                '> ARMURERIE (6 MODULES) ................... OK',
+                '> SYNTHÈSE VOCALE ......................... OK',
+                '> PROTOCOLES DE COMBAT .................... PRÊTS',
+                '> UTILISATEUR : ' + nomAffiche(),
+                '> TOUS LES SYSTÈMES SONT NOMINAUX.'
+            ];
+            let i = 0, fini = false;
+            let timer = null;
+            const terminer = () => {
+                if (fini) return;
+                fini = true; clearInterval(timer);
+                el.style.opacity = '0';
+                setTimeout(() => { el.style.display = 'none'; el.style.opacity = '1'; demarrerSysteme(); }, 400);
+            };
+            timer = setInterval(() => {
+                if (i < lignes.length) {
+                    const d = document.createElement('div'); d.textContent = lignes[i]; zone.appendChild(d);
+                    barre.style.width = ((i + 1) / lignes.length * 100) + '%';
+                    playBipSonore(500 + i * 90, 0.05);
+                    i++;
+                } else { terminer(); }
+            }, 230);
+            el.addEventListener('pointerdown', terminer, { once: true });
+        }
+
+        // Applique les réglages sauvegardés dès le chargement
+        document.getElementById('champ-prenom').value = prenom;
+        appliquerTheme(themeId);
+        majReglages();
 
         // ============================================================
         //  SOURIS + TOUCHER (pointer events : souris, doigt, stylet)
@@ -1595,7 +2459,7 @@
 
             const sur = (sel) => e.target && e.target.closest && e.target.closest(sel);
             const surItem = sur('.armory-item');
-            const surMenu = sur('.armory-menu');
+            const surMenu = sur('.armory-menu, #combat-panel, #fin-combat, #toast-lien');
             const c = armoryCentre();
             const surHub = Math.hypot(mouseX - c.x, mouseY - c.closedY) < 60;
 
@@ -1669,12 +2533,11 @@
             zoomCoeur = ancienneTailleZoom;
 
             // Radar
-            if (pageActuelle === 0) { majRadar(); majDrones(); }
+            if (pageActuelle === 0) { majRadar(); majDrones(); majVagues(); }
             drawRadar(); drawDrones(); drawDome();
 
             // Régénération du bouclier en combat
-            if (combatActif && !explosionEnCours && pageActuelle === 0 && bouclier < 100) bouclier = Math.min(100, bouclier + (armoryEquipeId === 'furtif' ? 0.06 : 0.02));
-            if (bouclier > 30) alerteBouclier = false;
+            if (combatActif && !explosionEnCours && pageActuelle === 0 && bouclier < 100) bouclier = Math.min(100, bouclier + (armoryEquipeId === 'furtif' ? 0.04 : 0.012));
             if (combatActif && frame % 6 === 0) majPanneauCombat();
 
             // Armurerie (rond + carrousel)
@@ -1691,6 +2554,7 @@
         //  VOIX DE J.A.R.V.I.S.
         // ============================================================
         function parlerJarvis(texte) {
+            if (!voixActive) return;
             window.speechSynthesis.cancel();
             const message = new SpeechSynthesisUtterance(texte);
             message.lang = 'fr-FR'; message.pitch = 0.82; message.rate = 1.05;
@@ -1751,10 +2615,12 @@
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('hud').style.display === 'none') return;
             if (explosionEnCours) return;
+            if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
             const k = e.key.toLowerCase();
             if (k >= '1' && k <= '6') { equiperParId(ARMORY_ITEMS[parseInt(k) - 1].id); }
             else if (k === 'c') { basculerCombat(!combatActif); }
             else if (k === 'r' && combatActif) { recharger(); }
+            else if (k === 'm') { basculerSon(); }
             else if (e.key === 'ArrowRight') { if (armoryOuvert) armoryAngle += 0.35; else allerPage(pageActuelle + 1); }
             else if (e.key === 'ArrowLeft') { if (armoryOuvert) armoryAngle -= 0.35; else allerPage(pageActuelle - 1); }
             else if (e.key === 'Escape') { allerPage(0); }
@@ -1792,9 +2658,9 @@
             const bioBox = document.getElementById('biometric-box');
             setTimeout(() => {
                 statusCam.innerHTML = "SUCCÈS"; statusCam.style.color = "#33ff55"; bioBox.style.borderColor = "#33ff55";
-                systemStatus.innerHTML = "[SÉCURITÉ] ACCÈS AUTORISÉ : DYLAN RECONNU.";
+                systemStatus.innerHTML = "[SÉCURITÉ] ACCÈS AUTORISÉ : " + nomAffiche() + " RECONNU.";
                 if (audioCtx) playBipSonore(1000, 0.3);
-                parlerJarvis("Profil biométrique confirmé. Bienvenue Monsieur DYLAN.");
+                parlerJarvis("Profil biométrique confirmé. Bienvenue " + appelAffiche() + ".");
                 bioBox.style.opacity = "0"; bioBox.style.transform = "translateX(-50px)";
                 setTimeout(() => { bioBox.style.display = "none"; LancerFluxDonnees(); }, 800);
             }, 4000);
@@ -1818,13 +2684,15 @@
                 if (event.results[dernierIndex] && event.results[dernierIndex][0]) {
                     const phrase = event.results[dernierIndex][0].transcript.toLowerCase().trim();
                     document.getElementById('system-status').innerHTML = `[VOCAL] REÇU : "${phrase}"`;
+                    noterCommande(phrase);
 
                     // Pendant l'auto-destruction, on ignore les autres commandes
                     if (explosionEnCours) return;
 
                     if (phrase.includes("jarvis") || phrase.includes("vis") || phrase.includes("service")) {
 
-                        if (phrase.includes("heure")) {
+                        if (traiterCommandeUtile(phrase)) { }
+                        else if (phrase.includes("heure")) {
                             const maintenant = new Date();
                             parlerJarvis(`Il est actuellement ${maintenant.getHours()} heures ${maintenant.getMinutes()}.`);
                         }
@@ -1834,6 +2702,7 @@
                         }
                         else if (phrase.includes("écran") || phrase.includes("page")) {
                             if (phrase.includes("armurerie") || phrase.includes("arme")) allerPage(1);
+                            else if (phrase.includes("outil")) allerPage(3);
                             else if (phrase.includes("système")) allerPage(2);
                             else if (phrase.includes("suivant")) allerPage(pageActuelle + 1);
                             else if (phrase.includes("précédent") || phrase.includes("retour")) allerPage(pageActuelle - 1);
@@ -1885,7 +2754,7 @@
                         else if (phrase.includes("destruction") || phrase.includes("boom")) {
                             window.speechSynthesis.cancel();
                             chargerArmure('CRITICAL_OVERRIDE', '#ff0000', 'danger', null);
-                            parlerJarvis("Protocole d'auto-destruction activé. Amorçage des charges thermiques. C'était un honneur, DYLAN.");
+                            parlerJarvis("Protocole d'auto-destruction activé. Amorçage des charges thermiques. C'était un honneur, " + appelAffiche() + ".");
                             setTimeout(() => { LancerSequenceExplosion(); }, 7000);
                         }
                         else if (phrase.includes("silence") || phrase.includes("tais-toi")) {
@@ -1930,6 +2799,8 @@
             armoryOuvert = false;
             radar.blips = []; tirs.length = 0; fx.length = 0; missiles.length = 0;
             arreterTirAuto();
+            arreterAmbiance();
+            document.getElementById('fin-combat').style.display = 'none';
             pageActuelle = 0; majDots();
             document.querySelectorAll('.ecran-extra').forEach(el => el.classList.remove('ouvert'));
             document.getElementById('combat-panel').style.display = 'none';
@@ -2002,17 +2873,13 @@
         document.getElementById('btn-init').addEventListener('click', () => {
             initAudio();
             playScanLaser();
+            const saisi = document.getElementById('champ-prenom').value.trim().slice(0, 20);
+            if (saisi) { prenom = saisi; ecrire('jarvis_prenom', prenom); }
             document.getElementById('preheat-container').style.display = 'none';
             document.getElementById('btn-init').style.display = 'none';
-            document.getElementById('hud').style.display = 'block';
-            armoryLayer.style.display = 'block';
-            document.getElementById('page-dots').style.display = 'flex';
-            systemeInitialise = true;
-            mettreAJourHorloge();
-            connecterBatterie();
-            parlerJarvis("Analyse biométrique de sécurité en cours.");
-            lancerFauxScanBiometrique();
-            activerMicroJarvis();
+            document.getElementById('champ-prenom').style.display = 'none';
+            if (ambiancePref) lancerAmbiance();
+            lancerBoot();
         });
 
         // ============================================================
