@@ -1,4 +1,5 @@
-const CACHE = 'jarvis-v2';
+// Service worker de JARVIS : permet l'installation et le fonctionnement hors-ligne.
+const CACHE = 'jarvis-v3';
 const FICHIERS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -13,8 +14,11 @@ self.addEventListener('activate', (e) => {
     self.clients.claim();
 });
 
+// Réseau d'abord (les mises à jour arrivent tout de suite), cache si pas de connexion
 self.addEventListener('fetch', (e) => {
     if (e.request.method !== 'GET') return;
+    // On ne touche pas aux requêtes vers d'autres sites (météo, etc.)
+    if (new URL(e.request.url).origin !== self.location.origin) return;
     e.respondWith(
         fetch(e.request)
             .then((r) => {
